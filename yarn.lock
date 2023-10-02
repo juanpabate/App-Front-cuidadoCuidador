@@ -4109,6 +4109,13 @@ expo-constants@~14.3.0:
     "@expo/config" "~8.0.0"
     uuid "^3.3.2"
 
+expo-device@~5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/expo-device/-/expo-device-5.2.1.tgz#2962abdb9682e5b991a82836667f2e7d7103d9ef"
+  integrity sha512-ZWGph+fGQPxo9v2e0YygPb45Hl+ZR3mh4tpLY5AOYK/sNjQy+Lu3T/sLGIdi2TOcYNL2oZwzZ6eGvwVYmdIfLg==
+  dependencies:
+    ua-parser-js "^0.7.33"
+
 expo-file-system@~15.2.2:
   version "15.2.2"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.2.2.tgz"
@@ -7315,7 +7322,7 @@ react-native-codegen@^0.71.5:
 
 react-native-gesture-handler@~2.9.0:
   version "2.9.0"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz#2f63812e523c646f25b9ad660fc6f75948e51241"
+  resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz"
   integrity sha512-a0BcH3Qb1tgVqUutc6d3VuWQkI1AM3+fJx8dkxzZs9t06qA27QgURYFoklpabuWpsUTzuKRpxleykp25E8m7tg==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
@@ -8588,6 +8595,11 @@ type-is@~1.6.18:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.24"
+
+ua-parser-js@^0.7.33:
+  version "0.7.36"
+  resolved "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.36.tgz"
+  integrity sha512-CPPLoCts2p7D8VbybttE3P2ylv0OBZEAy7a12DsulIEcAiMtWJy+PBgMXgWDI80D5UwqE8oQPHYnk13tm38M2Q==
 
 ua-parser-js@^1.0.35:
   version "1.0.35"

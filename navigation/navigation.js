@@ -8,9 +8,9 @@ const Stack= createStackNavigator();
 export default function MyStack (){
     return(
         <Stack.Navigator screenOptions={{headerShown: false}} >
-            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Login" component={Log} />
             <Stack.Screen name="Register" component={Register} options={{animationEnabled: false}}/>
+            <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
     )
 };

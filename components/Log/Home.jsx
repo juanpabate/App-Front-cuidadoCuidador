@@ -1,8 +1,10 @@
-import { View, Text, Image, StyleSheet, StatusBar, ImageBackground, Platform } from 'react-native'
+import { View, Text, Image, StyleSheet, StatusBar, ImageBackground } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Device from 'expo-device';
 
 const Home = () => {
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar>
@@ -15,16 +17,16 @@ const Home = () => {
       <ImageBackground source={require('../../assets/images/home/circle.png')} style={styles.circleBackground}>
         <View style={styles.cardsContainer}>
 
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={[Device.osName === 'Android' ? styles.shadowAndroid : styles.shadowIos, styles.cardHeight]}>
             <Image source={require('../../assets/images/home/perfil.png')} style={styles.card}/>
           </View>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={[Device.osName === 'Android' ? styles.shadowAndroid : styles.shadowIos, styles.cardHeight]}>
             <Image source={require('../../assets/images/home/notificaciones.png')} style={styles.card}/>
           </View>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={[Device.osName === 'Android' ? styles.shadowAndroid : styles.shadowIos, styles.cardHeight]}>
             <Image source={require('../../assets/images/home/rutina.png')} style={styles.card}/>
           </View>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={[Device.osName === 'Android' ? styles.shadowAndroid : styles.shadowIos, styles.cardHeight]}>
             <Image source={require('../../assets/images/home/logros.png')} style={styles.card}/>
           </View>
 
@@ -32,16 +34,16 @@ const Home = () => {
       </ImageBackground>
 
       <View style={styles.buttonsContainer}>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={Device.osName === 'Android' ? null : styles.shadowIos}>
             <Image source={require('../../assets/images/home/retos.png')} style={styles.button}/>
           </View>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={Device.osName === 'Android' ? null : styles.shadowIos}>
             <Image source={require('../../assets/images/home/informacion.png')} style={styles.button}/>
           </View>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={Device.osName === 'Android' ? null : styles.shadowIos}>
             <Image source={require('../../assets/images/home/comunidad.png')} style={styles.button}/>
           </View>
-          <View style={Platform.OS === 'android' ? styles.shadowAndroid : styles.shadowIos}>
+          <View style={Device.osName === 'Android' ? null : styles.shadowIos}>
             <Image source={require('../../assets/images/home/soporte.png')} style={styles.button}/>
           </View>
 
@@ -112,14 +114,27 @@ const styles= StyleSheet.create({
     height: 100,
     margin: 0,
   },
+  cardHeight: {
+    height: 100,
+  },
   shadowIos: {
     shadowColor: 'black', // Color de la sombra
     shadowOffset: { width: 1, height: 1 }, // Desplazamiento de la sombra
     shadowOpacity: 0.4, // Opacidad de la sombra
     shadowRadius: 5, // Radio de la sombra
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   shadowAndroid: {
-    elevation: 5,
+    elevation: 10, // Nivel de elevación (ajusta según sea necesario)
+    // backgroundColor: 'white',
+    // shadowColor: 'black', // Color de la sombra
+    // shadowOffset: { width: 1, height: 1 }, // Desplazamiento de la sombra
+    // shadowOpacity: 0.4, // Opacidad de la sombra
+    // shadowRadius: 5,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    borderRadius: 15,
   },
   buttonsContainer: {
     // borderColor: '#fff',

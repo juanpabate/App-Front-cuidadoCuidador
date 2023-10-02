@@ -1,31 +1,95 @@
-import { Text, TextInput, Image, TouchableOpacity, View, StyleSheet, Touchable} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet, StatusBar} from "react-native";
+import { useState } from "react";
+
 
 export default function Register({navigation: {navigate}}){
+
+  const [user, setUser]= useState(' ');
+  const [password, setPassword]= useState(' ');
+  const [email, setEmail]= useState(' ');
+  const [userError, setUserError]= useState(false);
+  const [passwordError, setPasswordError]= useState(false);
+  const [emailError, setEmailError]= useState(false);
+
+  const [emailErrorMensaje, setEmailErrorMensaje]= useState('Por favor rellene todos los campos');
+
+
+  const handleUser= (e)=>{
+    setUserError(false);
+    if(e.nativeEvent.text == ''){
+      setUserError(true);
+    }
+    setUser(e.nativeEvent.text);
+  };
+
+  const handlePassword= (e)=>{
+    setPasswordError(false);
+    if(e.nativeEvent.text == ''){
+      setPasswordError(true);
+    }
+    setPassword(e.nativeEvent.text);
+  };
+
+  const handleEmail= (e)=>{
+    setEmailError(false);
+    if(e.nativeEvent.text == ''){
+      setEmailError(true);
+    }
+    setEmail(e.nativeEvent.text);
+  };
+
+  const handleNavigate= ()=>{
+    const emailRegExp= /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const validateEmail= emailRegExp.test(email);
+
+    if(validateEmail== false){
+      setEmailError(true);
+      setEmailErrorMensaje('Correo electrónico inválido');
+    };
+
+    validateIsFilled(user, setUserError);
+    validateIsFilled(password, setPasswordError);
+    validateIsFilled(email, setEmailError);
+
+    if(user!== ' ' && password!== ' ' && email!== ' ' && validateEmail== true){
+      navigate('Home');
+    };
+  };
+
+  function validateIsFilled(input, setInputError){
+    if(input == ' '){
+      setInputError(true);
+    }
+  };
   return(
-    <LinearGradient colors={['#066B10', '#fafafa']} start={{x: 0, y: 1}} end={{x: 0, y: 0.3}} style={styles.after}>
     <View style={styles.container}>
-      <Image source={require('/Users/usuario/Documents/APP/app/images/Logo.png')} style={styles.logo}/>
+      <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar>
+      <View style={styles.logoContainer}>
+        {/* <Image source={require('../../images/Logo.png')} style={styles.logo}/> */}
+      </View>
       <View style={styles.dataContainer}>
-        <Text style={styles.title}>Registro</Text>
-        <Text style={styles.subTitle}>Ingresa los datos para registrarte</Text>
         <View style={styles.inputsContainer}>
-          <TextInput style={styles.input} placeholder="Correo electrónico" selectionColor={'#066B10'}></TextInput>
-          <TextInput style={styles.input} placeholder="Usuario" selectionColor={'#066B10'}></TextInput>
-          <TextInput style={styles.input} placeholder="Contraseña" selectionColor={'#066B10'}></TextInput>
+          <TextInput textAlign="center" style={styles.input} placeholder="Nombre" placeholderTextColor="#fff" selectionColor={'#fff'} autoCorrect={false} onChange={handleUser}></TextInput>
+          {userError== true && 
+          <Text style={styles.error}>Por favor rellene todos los campos</Text>
+          }
+          <TextInput textAlign="center" style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#fff" selectionColor={'#fff'} autoCorrect={false} onChange={handleEmail}></TextInput>
+          {emailError== true && 
+          <Text style={styles.error}> {emailErrorMensaje} </Text>
+          }
+          <TextInput textAlign="center" style={styles.input} placeholder="Contraseña" placeholderTextColor="#fff" selectionColor={'#fff'} secureTextEntry={true} onChange={handlePassword}></TextInput>
+          {passwordError== true && 
+          <Text style={styles.error}>Por favor rellene todos los campos</Text>
+          }
         </View>
-        <TouchableOpacity style={styles.buttonContainer}>
-          <LinearGradient  style={styles.button} colors={['#066B10', '#0EEB24']} start={{x: 0, y: 0}} end={{x: 1, y: 0}} >
-            <Text style={styles.buttonText}>Enviar</Text>
-          </LinearGradient>
+        <TouchableOpacity style={styles.buttonContainer} onPress={handleNavigate}>
+          <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
-        <View style={styles.registerAcount}>
-          <Text style={styles.subText}>¿Ya tienes una cuenta?</Text>
-          <Text style={[styles.link, styles.subText]} onPress={()=> navigate('Login')}>Ingresa</Text>
-        </View>
+        <TouchableOpacity style={styles.registerAcount} onPress={()=> navigate('Login')}>
+          <Text style={styles.subText} >Iniciar sesión</Text>
+        </TouchableOpacity>
       </View>
     </View>
-    </LinearGradient>
   );
 }
 
@@ -35,88 +99,86 @@ const styles= StyleSheet.create({
     resizeMode: 'contain'
   },
   container: {
-
     alignItems: 'center',
     paddingTop: 30,
     flex: 1,
+    backgroundColor: '#34a666',
+  },
+  logoContainer: {
+    backgroundColor: '#329b66',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: '40%',
+    borderBottomLeftRadius: 110,
+    borderBottomRightRadius: 110,
   },
   after: {
     flex: 1,
   },
   dataContainer: {
-    width: 320,
-    height: 430,
-    backgroundColor: '#FFF',
+    width: '80%',
     borderRadius: 15,
-    shadowColor: "rgba(0, 0, 0, 0.09)",
-    shadowOffset: {
-      width: 7,
-      height: 7,
-    },
-    shadowOpacity: 1,
     shadowRadius: 3.84,
-    elevation: 15,
-    padding: 25,
-    paddingTop: 30,
-    marginTop: 25,
-    paddingBottom: 10,
-  },
-  title: {
-    fontSize: 25,
-    color: '#066B10',
-    fontWeight: 700,
-  },
-  subTitle: {
-    color: '#A0A0A0',
-    fontWeight: 700,
-    fontSize: 15,
-    marginTop: 5,
+    padding: 15,
+    marginTop: 35,
+    alignItems: 'center',
   },
   inputsContainer: {
-    height: 215,
-    marginTop: 20,
-
+    minHeight: 200,
+    width: '100%',
+    marginBottom: 10,
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   input: {
-    backgroundColor: '#efefef',
-    borderRadius: 15,
+    width: '100%',
+    borderRadius: 25,
+    color: 'white',
     height: 60,
-    gap: 30,
-    fontSize: 20,
-    paddingLeft: 15,
+    fontSize: 25,
+    borderWidth: 2,
+    borderColor: '#fff',
+    marginBottom: 10,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'center',
-    marginTop: 17,
-    marginBottom: 20,
-  },
-  button: {
-    width: 170,
-    height: 45,
-    borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    backgroundColor: '#fff',
+    height: 55,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+    marginTop: 5,
+    width: '70%',
+    borderRadius: 25,
   },
   buttonText:{
     fontWeight: 'bold',
-    color: '#fff',
-    fontSize: 17,
+    color: '#329b66',
+    fontSize: 22,
   },
   registerAcount: {
-    flexDirection: 'row',
-    flex: 1,
+    height: 25,
+    marginTop: 20,
+    width: '45%',
     justifyContent: 'center',
     fontSize: 10,
+    backgroundColor: '#2f8e5a',
   },
   subText: {
-    fontSize: 10,
+    fontSize: 12,
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
   },
-  link: {
-    marginLeft: 5,
-    color: '#066B10',
-  },
+  error: {
+    textAlign: 'center',
+    width: '80%',
+    color: 'white',
+    fontWeight: 'bold',
+    color: 'white',
+    backgroundColor: '#FF7670',
+    marginBottom: 10,
+    // marginTop: 5,
+  }
 });
