@@ -63,7 +63,7 @@ export default function Register({navigation: {navigate}}){
   };
   return(
     <View style={styles.container}>
-      <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar>
+      {/* <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar> */}
       <View style={styles.logoContainer}>
         {/* <Image source={require('../../images/Logo.png')} style={styles.logo}/> */}
       </View>

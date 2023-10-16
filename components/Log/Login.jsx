@@ -1,5 +1,7 @@
-import { Text, TextInput, TouchableOpacity, View, StyleSheet, StatusBar} from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet} from "react-native";
+import { Image } from 'expo-image';
 import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function Log({navigation: {navigate}}){
@@ -40,7 +42,7 @@ export default function Log({navigation: {navigate}}){
     validateIsFilled(password, setPasswordError);
 
     if(itsOk== true){
-      navigate('Home');
+      navigate('Main');
     };
   };
 
@@ -52,43 +54,57 @@ export default function Log({navigation: {navigate}}){
   };
 
   return(
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar>
-      <View style={styles.logoContainer}>
-        {/* <Image source={require('../../images/Logo.png')} style={styles.logo}/> */}
+    <SafeAreaView style={styles.container}>
+     
+      <Image style={styles.logo} source={require('../../assets/images/logo.png')} />
+
+      <View style={styles.inputsContainer}>
+        <TextInput textAlign="left" style={styles.input} placeholder="Ingresa tu correo o nombre de usuario" placeholderTextColor="#7FAF69" selectionColor={'#fff'} onChange={handleUser}></TextInput>
+        {userError== true && 
+        <Text style={styles.error}>Por favor rellene todos los campos</Text>
+        }
+        <TextInput textAlign="left" secureTextEntry={true} style={styles.input} placeholder="Contraseña" placeholderTextColor="#7FAF69" selectionColor={'#fff'} onChange={handlePassword}></TextInput>          
+        {passwordError== true && 
+        <Text style={styles.error}>Por favor rellene todos los campos</Text>
+        }
       </View>
-      <View style={styles.dataContainer}>
-        <View style={styles.inputsContainer}>
-          <TextInput textAlign="center" style={styles.input} placeholder="Usuario" placeholderTextColor="#fff" selectionColor={'#fff'} onChange={handleUser}></TextInput>
-          {userError== true && 
-          <Text style={styles.error}>Por favor rellene todos los campos</Text>
-          }
-          <TextInput textAlign="center" secureTextEntry={true} style={styles.input} placeholder="Contraseña" placeholderTextColor="#fff" selectionColor={'#fff'} onChange={handlePassword}></TextInput>
-          {passwordError== true && 
-          <Text style={styles.error}>Por favor rellene todos los campos</Text>
-          }
+      <TouchableOpacity >
+        <Text style={styles.subText}>¿Olvidaste tu contraseña?</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleNavigate}>
+        <Text style={styles.buttonText}>Iniciar sesión</Text>
+      </TouchableOpacity>
+
+      <View style={styles.socialMediaContainer}> 
+        <Text style={styles.subText}>o continúa con</Text>
+        <View style={styles.socialMediaIconsContainer} >
+          <Image style={styles.socialMediaIcon} source={require('../../assets/images/login/facebook.svg')} />
+          <Image style={styles.socialMediaIcon} source={require('../../assets/images/login/google.svg')} />
         </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={handleNavigate}>
-          <Text style={styles.buttonText}>Iniciar sesión</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.registerAcount} onPress={()=> navigate('Register')}>
-          <Text style={styles.subText} >¡Crea una cuenta!</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+
+      <TouchableOpacity style={styles.registerAcount} onPress={()=> navigate('Register')}>
+        <Text style={styles.registerAcountText} >Registrarse</Text>
+      </TouchableOpacity>
+
+    </SafeAreaView>
   );
 }
 
 const styles= StyleSheet.create({
   logo: {
-    width: 260,
-    resizeMode: 'contain'
+    width: 270,
+    height: 220,
+    resizeMode: 'contain',
+    marginBottom: 40,
   },
   container: {
-    alignItems: 'center',
-    paddingTop: 30,
     flex: 1,
-    backgroundColor: '#34a666',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 30,
   },
   logoContainer: {
     backgroundColor: '#329b66',
@@ -112,59 +128,85 @@ const styles= StyleSheet.create({
     alignItems: 'center',
   },
   inputsContainer: {
-    minHeight: 130,
+    minHeight: 164,
     width: '100%',
-    marginBottom: 10,
+    marginBottom: 5,
     justifyContent: 'space-between',
     alignItems: 'center',
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   input: {
     width: '100%',
-    borderRadius: 25,
-    color: 'white',
-    height: 60,
-    fontSize: 25,
+    borderRadius: 10,
+    color: '#7FAF69',
+    height: 70,
+    fontSize: 18,
     borderWidth: 2,
     borderColor: '#fff',
     marginBottom: 10,
+    backgroundColor: 'rgba(144, 226, 111, 0.34)',
+    paddingLeft: 30,
   },
   buttonContainer: {
-    backgroundColor: '#fff',
-    height: 55,
+    backgroundColor: '#7FAF69',
+    height: 75,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 5,
-    marginTop: 17,
-    width: '70%',
-    borderRadius: 25,
+    marginBottom: 25,
+    marginTop: 37,
+    width: '100%',
+    borderRadius: 10,
   },
   buttonText:{
-    fontWeight: 'bold',
-    color: '#329b66',
-    fontSize: 22,
-  },
-  registerAcount: {
-    height: 25,
-    marginTop: 20,
-    width: '45%',
-    justifyContent: 'center',
-    fontSize: 10,
-    backgroundColor: '#2f8e5a',
-  },
-  subText: {
-    fontSize: 12,
-    textAlign: 'center',
+    fontWeight: '500',
     color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 22,
   },
   error: {
     textAlign: 'center',
     width: '80%',
     color: 'white',
     fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: '#FF7670',
+    color: '#FF7670',
+    // backgroundColor: '#FF7670',
     marginBottom: 10,
     // marginTop: 5,
-  }
+  },
+  subText: {
+    // borderWidth: 1,
+    // borderColor: 'red',
+    width: '100%',
+    textAlign: 'center',
+    color: '#B0B0B0',
+    fontSize: 16,
+    paddingRight: 10,
+  },
+  socialMediaContainer: {
+    // borderWidth: 1,
+    // borderColor: 'red',
+    gap: '10',
+    width: 150,
+    alignItems: 'center',
+  },
+  socialMediaIconsContainer: {
+    // borderWidth: 1,
+    // borderColor: 'red',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 15,
+  },
+  socialMediaIcon: {
+    width: 50,
+    height: 50,
+  },
+  registerAcount: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  registerAcountText: {
+    color: '#7FAF69',
+    fontSize: 18,
+    fontWeight: 500,
+  },
 });
