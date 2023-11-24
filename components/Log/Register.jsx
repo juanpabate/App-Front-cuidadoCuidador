@@ -96,7 +96,7 @@ export default function Register({navigation: {navigate}}){
 const styles= StyleSheet.create({
   logo: {
     width: 260,
-    resizeMode: 'contain'
+    contentFit: 'contain'
   },
   container: {
     alignItems: 'center',

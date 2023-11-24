@@ -1,8 +1,17 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, TextInput} from 'react-native';
 import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+
+
+const COLORES= {
+  verdePrincipal: '#7FAF69',
+  blanco: '#fff',
+  gris: '#F6F6F6',
+  azulOscuro: '#45B3CB',
+  azulClaro: '#ECF2F3',
+};
 
 
 //INFORMACIÓN DE LAS CARDS
@@ -42,24 +51,24 @@ const TASKS = [
 ];
 
 //INFORMACIÓN DE LOS CHATS
-const CHATS = [
-  {
-    id: 1,
-    name: 'María Vélez',
-  },
-  {
-    id: 2,
-    name: 'Carlos Pérez',
-  },
-  {
-    id: 3,
-    name: 'Clara Morales',
-  },
-  {
-    id: 4,
-    name: 'Pablo Madrid',
-  }
-];
+// const CHATS = [
+//   {
+//     id: 1,
+//     name: 'María Vélez',
+//   },
+//   {
+//     id: 2,
+//     name: 'Carlos Pérez',
+//   },
+//   {
+//     id: 3,
+//     name: 'Clara Morales',
+//   },
+//   {
+//     id: 4,
+//     name: 'Pablo Madrid',
+//   }
+// ];
 
 
 //COMPONENTE DE LA CARD
@@ -69,7 +78,7 @@ const Card = ({ title, icon, bgColor }) => {
   return (
     <TouchableWithoutFeedback
       style={[styles.card, { backgroundColor: bgColor }]}
-      onPress={() => navigation.navigate('Register')}
+      onPress={() => navigation.navigate('Notificaciones')}
     >
       <Image style={styles.cardLogo} source={icon} />
       <Text style={styles.cardTitle}>{title}</Text>
@@ -121,17 +130,21 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView style={styles.container} >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false} >
 
         <View style={styles.header} >
-          <Image style={styles.logo} source={require('../assets/images/logo.png')}/>
+          <View style={styles.welcome} >
+            <Image style={styles.welcomeImage} source={require('../assets/images/home/userPhoto.png')}/>
+            <View>
+              <Text style={styles.welcomeText}>Hola,</Text>
+              <Text style={styles.welcomeTextBold}>Carolina 👋</Text> 
+            </View>
+          </View>
+          {/* <Image style={styles.logo} source={require('../assets/images/logo.png')}/> */}
           <Image style={styles.hamburger} source={require('../assets/images/home/hamburger.svg')}/>
         </View>
 
-        <View style={styles.welcome} >
-          <Image style={styles.welcomeImage} source={require('../assets/images/home/userPhoto.png')}/>
-          <Text style={styles.welcomeText} >Hola, <Text style={styles.welcomeTextBold}>Carolina</Text> 👋</Text>
-        </View>
+        
 
         <FlatList
           data={CARDS_DATA}
@@ -164,30 +177,31 @@ const Home = () => {
       
         </View>
 
-        <View style={styles.sectionContainer} >
-
-          <View style={[styles.sectionTextContainer, {marginBottom: 35} ]}>
-            <Text style={styles.sectionTitle}>Tienes mensajes nuevos</Text>
-            <TouchableOpacity>
-              <Text style={styles.sectionTouchable}>foro</Text>
-            </TouchableOpacity>
+        <View style={styles.tipContainer}> 
+          <View style={styles.tipTextContainer}>
+            <Text style={styles.tipTitle}>Recomendación</Text>
+            <Text style={styles.tipText}>Fermentum posuere urna nec tincidunt praesent semper feugiat. Odio tempor orci dapibus ultrices. Amet luctus venenatis.</Text>
           </View>
-          
-          <FlatList
-          data={CHATS}
-          renderItem={({ item }) => (
-            <Chat name={item.name}/>
-          )}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={separatorHorizontalChat}
-          showsHorizontalScrollIndicator={false}
-          flexGrow={0}
-          horizontal={true}
-        />
-      
+          <Image style={styles.tipImage} source={require('../assets/images/home/tip.png')} />
         </View>
 
+        {/* <View style={styles.sectionContainer} >
+
+          <View style={[styles.sectionTextContainer, {marginBottom: 20} ]}>
+            <Text style={styles.sectionTitle}>Pregunta en el foro</Text>
+            <TouchableOpacity>
+              <Text style={styles.sectionTouchable}>Ir al foro</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TextInput style={styles.foroInput} placeholder='Escribe algo...' placeholderTextColor="#CAC2C2" selectionColor={'#CAC2C2'}/>
+      
+        </View> */}
+        
+      {/* <View style={{ height: 60 }} /> */}
+
       </ScrollView>
+
     </SafeAreaView>
     
   )
@@ -195,21 +209,28 @@ const Home = () => {
 
 const styles= StyleSheet.create({
   mainContainer:{
-    backgroundColor: '#fff',
+    backgroundColor: COLORES.blanco,
     alignItems: 'center',
     flex: 1,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
+    // marginBottom: 80
   },
   container: {
     // borderColor: 'red',
     // borderWidth: 1,
     flex: 1,
+    // height: 1000,
     width: '100%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    backgroundColor: '#F6F6F6',
-    paddingHorizontal: 25,
-    paddingVertical: 10,
+    backgroundColor: COLORES.gris,
+    // paddingHorizontal: 25,
+    // paddingVertical: 10,
+    // marginBottom: 100,
+    paddingBottom: 40,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20
   },
   header: {
     // borderColor: 'red',
@@ -219,6 +240,7 @@ const styles= StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 18
     // paddingRight: 20,
   },
   logo: {
@@ -233,7 +255,7 @@ const styles= StyleSheet.create({
     // borderWidth: 1,
     width: 25,
     height: 25,
-    resizeMode: 'contain',
+    contentFit: 'contain',
     marginRight: 20,
   },
   welcome: {
@@ -255,6 +277,7 @@ const styles= StyleSheet.create({
   },
   welcomeTextBold: {
     fontWeight: 'bold',
+    fontSize: 20
   },
   card: {
     // borderColor: 'red',
@@ -276,12 +299,13 @@ const styles= StyleSheet.create({
     color: '#fff',
     marginBottom: 8,
     fontWeight: 600,
-    lineHeight: 20
+    lineHeight: 20,
+    fontSize: 16
   },
   sectionContainer: {
     // borderColor: 'red',
     // borderWidth: 1,
-    marginTop: 30,
+    marginTop: 20,
   },
   sectionTextContainer: {
     // borderColor: 'red',
@@ -299,7 +323,7 @@ const styles= StyleSheet.create({
   },
   sectionTouchable: {
     fontSize: 16,
-    color: '#45B3CB'
+    color: COLORES.azulOscuro
   },
   tasksContainer: {
     // borderColor: 'red',
@@ -311,7 +335,7 @@ const styles= StyleSheet.create({
     // borderWidth: 1,
     width: '100%',
     height: 65,
-    backgroundColor: '#ECF2F3',
+    backgroundColor: COLORES.azulClaro,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
@@ -333,6 +357,18 @@ const styles= StyleSheet.create({
     right: 35,
   },
 
+  // foroInput: {
+  //   width: '100%',
+  //   height: 60,
+  //   backgroundColor: '#fff',
+  //   borderWidth: 1,
+  //   borderColor: '#E2E2E2',
+  //   borderRadius: 16,
+  //   color: '#CAC2C2',
+  //   fontSize: 20,
+  //   paddingHorizontal: 15
+  // },
+
   chatCard: {
     // borderColor: 'red',
     // borderWidth: 1,
@@ -348,6 +384,36 @@ const styles= StyleSheet.create({
     // borderColor: 'red',
     // borderWidth: 1,
     // width: '50%'
+  },
+
+  tipContainer: {
+    height: 140,
+    width: '100%',
+    backgroundColor: COLORES.verdePrincipal,
+    marginTop: 20,
+    borderRadius: 20,
+    padding: 15,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  tipTextContainer: {
+    flex: 1
+  },
+  tipTitle: {
+    color: COLORES.blanco,
+    fontWeight: 'bold',
+    fontSize: 24,
+    // marginBottom: 5
+  },
+  tipText: {
+    color: COLORES.blanco,
+    fontSize: 15
+  },
+  tipImage: {
+    contentFit: 'contain',
+    width: 90,
+    height: 90,
+    flex: 0.5
   }
 })
 

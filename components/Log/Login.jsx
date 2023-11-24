@@ -96,7 +96,7 @@ const styles= StyleSheet.create({
   logo: {
     width: 270,
     height: 220,
-    resizeMode: 'contain',
+    contentFit: 'contain',
     marginBottom: 40,
   },
   container: {
@@ -141,7 +141,7 @@ const styles= StyleSheet.create({
     borderRadius: 10,
     color: '#7FAF69',
     height: 70,
-    fontSize: 18,
+    fontSize: 16,
     borderWidth: 2,
     borderColor: '#fff',
     marginBottom: 10,
@@ -185,7 +185,7 @@ const styles= StyleSheet.create({
   socialMediaContainer: {
     // borderWidth: 1,
     // borderColor: 'red',
-    gap: '10',
+    gap: 10,
     width: 150,
     alignItems: 'center',
   },

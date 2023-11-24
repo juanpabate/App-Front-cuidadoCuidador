@@ -5,7 +5,8 @@ import Register from "../components/Log/Register";
 import Home from "../components/Home";
 import Notifications from "../components/Notifications";
 import { Image } from 'expo-image';
-import { View } from "react-native";
+import { View , Keyboard} from "react-native";
+import { useState, useEffect } from "react";
 
 const Stack= createStackNavigator();
 
@@ -26,7 +27,7 @@ const tabBarIcon = (icon, iconActive, focused) => {
        style={{
         width: '100%',
         height: '100%',
-        resizeMode: 'contain',
+        contentFit: 'contain',
       }}
        />
       </View>
@@ -45,16 +46,49 @@ export function MyStack (){
 };
 
 export function TabNavigation() {
+
+    const [keyboardActive, setKeyboardActive]= useState(false);
+
+      // Función para manejar el evento de mostrar el teclado
+    const handleKeyboardShow = () => {
+      setKeyboardActive(true);
+    };
+
+    // Función para manejar el evento de ocultar el teclado
+    const handleKeyboardHide = () => {
+      setKeyboardActive(false);
+    };
+
+    // Suscribirse a los eventos del teclado
+    useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        handleKeyboardShow
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        handleKeyboardHide
+      );
+
+      // Asegúrate de eliminar los oyentes cuando el componente se desmonte
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }, []);
+
     return (
       <Tab.Navigator screenOptions={{ headerShown: false, 
         tabBarStyle: {
-          position: 'absolute',
-          height: 110,
+          // position: 'absolute',
+          height: 80,
+          marginTop: 10,
+          display: keyboardActive ? 'none' : 'flex',
           // width: '90%',
-          marginHorizontal: 18,
-          padding: 20,
-          borderTopLeftRadius: 40,
-          borderTopRightRadius: 40,
+          // marginHorizontal: 18,
+          // padding: 5,
+          // borderTopLeftRadius: 30,
+          // borderTopRightRadius: 30,
           // justifyContent: 'center',
           // alignItems: 'center'
         }
@@ -121,6 +155,6 @@ export function TabNavigation() {
             tabBarLabel: () => null,
             }}
         />
-      </Tab.Navigator>
+      </Tab.Navigator>      
     );
   }
