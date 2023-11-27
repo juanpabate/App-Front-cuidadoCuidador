@@ -37,13 +37,43 @@ export default function Log({navigation: {navigate}}){
     setPassword(e.nativeEvent.text);
   };
 
-  const handleNavigate= ()=>{
+  const handleNavigate= async()=>{
     validateIsFilled(user, setUserError);
     validateIsFilled(password, setPasswordError);
 
-    if(itsOk== true){
-      navigate('Main');
-    };
+    if (itsOk) {
+      try {
+        const response = await fetch('http://10.0.2.2:3000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: user,
+            password: password,
+          }),
+        });
+  
+        if (!response.ok) {
+          const data = await response.json();
+          const errorMessage = data.error || 'Error desconocido en el servidor';
+          console.error('Error en la solicitud:', errorMessage);
+          return;
+        }
+  
+        const data = await response.json();
+  
+        if (data.success) {
+          // Las credenciales son válidas, navega a 'Main'
+          navigate('Main');
+        } else {
+          // Las credenciales no son válidas
+          console.error('Credenciales no válidas');
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    }
   };
 
   function validateIsFilled(input, setInputError){

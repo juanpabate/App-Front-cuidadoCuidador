@@ -4,9 +4,9 @@ import { useState } from "react";
 
 export default function Register({navigation: {navigate}}){
 
-  const [user, setUser]= useState(' ');
-  const [password, setPassword]= useState(' ');
-  const [email, setEmail]= useState(' ');
+  const [user, setUser]= useState('');
+  const [password, setPassword]= useState('');
+  const [email, setEmail]= useState('');
   const [userError, setUserError]= useState(false);
   const [passwordError, setPasswordError]= useState(false);
   const [emailError, setEmailError]= useState(false);
@@ -38,29 +38,55 @@ export default function Register({navigation: {navigate}}){
     setEmail(e.nativeEvent.text);
   };
 
-  const handleNavigate= ()=>{
-    const emailRegExp= /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    const validateEmail= emailRegExp.test(email);
-
-    if(validateEmail== false){
+  const handleNavigate = async () => {
+    const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    const validateEmail = emailRegExp.test(email);
+  
+    if (!user || !password || !email) {
+      setUserError(true);
+      setPasswordError(true);
+      setEmailError(true);
+      return;
+    }
+  
+    if (!validateEmail) {
       setEmailError(true);
       setEmailErrorMensaje('Correo electrónico inválido');
-    };
-
-    validateIsFilled(user, setUserError);
-    validateIsFilled(password, setPasswordError);
-    validateIsFilled(email, setEmailError);
-
-    if(user!== ' ' && password!== ' ' && email!== ' ' && validateEmail== true){
-      navigate('Home');
-    };
-  };
-
-  function validateIsFilled(input, setInputError){
-    if(input == ' '){
-      setInputError(true);
+      return;
+    }
+  
+    try {
+      // Solicitud POST al servidor
+      const response = await fetch('http://10.0.2.2:3000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: user,
+          password: password,
+          email: email,
+        }),
+      });
+  
+      if (!response.ok) {
+        // Manejo del error 
+        console.error('Error en la solicitud:', response.status);
+        return;
+      }
+  
+      // Manejo respuesta del servidor
+      const data = await response.json();
+      console.log('Respuesta del servidor:', data);
+  
+      // Redirigir al login
+      navigate('Login');
+    } catch (error) {
+      // Manejo de errores de solicitud
+      console.error('Error al realizar la solicitud:', error);
     }
   };
+
   return(
     <View style={styles.container}>
       {/* <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar> */}
