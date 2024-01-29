@@ -2,7 +2,7 @@ import { Text, TextInput, TouchableOpacity, View, StyleSheet, StatusBar} from "r
 import { useState } from "react";
 
 
-export default function Register({navigation: {navigate}}){
+export default function Register({navigation}){
 
   const [user, setUser]= useState('');
   const [password, setPassword]= useState('');
@@ -57,7 +57,7 @@ export default function Register({navigation: {navigate}}){
   
     try {
       // Solicitud POST al servidor
-      const response = await fetch('http://10.0.2.2:3000/register', {
+      const response = await fetch('https://cuidado-cuidador-backend.onrender.com/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function Register({navigation: {navigate}}){
       console.log('Respuesta del servidor:', data);
   
       // Redirigir al login
-      navigate('Login');
+      navigation.replace('Login');
     } catch (error) {
       // Manejo de errores de solicitud
       console.error('Error al realizar la solicitud:', error);
@@ -111,7 +111,7 @@ export default function Register({navigation: {navigate}}){
         <TouchableOpacity style={styles.buttonContainer} onPress={handleNavigate}>
           <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.registerAcount} onPress={()=> navigate('Login')}>
+        <TouchableOpacity style={styles.registerAcount} onPress={()=> navigation.replace('Login')}>
           <Text style={styles.subText} >Iniciar sesión</Text>
         </TouchableOpacity>
       </View>

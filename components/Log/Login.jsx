@@ -1,32 +1,43 @@
-import { Text, TextInput, TouchableOpacity, View, StyleSheet} from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Image } from 'expo-image';
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AwesomeAlert from "react-native-awesome-alerts";
+import NetInfo from "@react-native-community/netinfo";
+
+import { useDispatch } from "react-redux";
+import { iniciarSesion, cerrarSesion } from "../../context/userSlice";
 
 
-export default function Log({navigation: {navigate}}){
+export default function Log({navigation}){
 
-  const [user, setUser]= useState(' ');
+  const [email, setEmail]= useState(' ');
   const [password, setPassword]= useState(' ');
   const [userError, setUserError]= useState(false);
   const [passwordError, setPasswordError]= useState(false);
 
   const [itsOk, setItsOk]= useState(false);
 
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertTitle, setAlertTitle] = useState(''); 
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertCallback, setAlertCallback] = useState(null);
+
   useEffect(()=>{
-    if(user!== ' ' && password!== ' '){
+    if(email!== ' ' && password!== ' '){
       setItsOk(true);
     }else if(userError== true || passwordError== true){
       setItsOk(false);
     }
-  }, [user, password]);
+  }, [email, password]);
 
   const handleUser= (e)=>{
     setUserError(false);
     if(e.nativeEvent.text == ''){
       setUserError(true);
     }
-    setUser(e.nativeEvent.text);
+    setEmail(e.nativeEvent.text);
   };
 
   const handlePassword= (e)=>{
@@ -37,42 +48,92 @@ export default function Log({navigation: {navigate}}){
     setPassword(e.nativeEvent.text);
   };
 
+  const dispatch= useDispatch();
+
+  //FUNCION DE LOGEO
   const handleNavigate= async()=>{
-    validateIsFilled(user, setUserError);
+
+    // Si no está conectado a internet:
+    const netInfoState = await NetInfo.fetch();
+    if (!netInfoState.isConnected) {
+      showAlertWithTitleAndMessage('Error de conexión', 'Por favor, enciende tu conexión a Internet.');
+      setTimeout(() => {
+        hideAlert();
+      }, 1500);
+      return;
+    }
+
+    //Si está conectado a internet:
+    validateIsFilled(email, setUserError);
     validateIsFilled(password, setPasswordError);
 
     if (itsOk) {
       try {
-        const response = await fetch('http://10.0.2.2:3000/login', {
+        const response = await fetch('https://cuidado-cuidador-backend.onrender.com/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            user: user,
+            email: email,
             password: password,
           }),
         });
   
         if (!response.ok) {
           const data = await response.json();
-          const errorMessage = data.error || 'Error desconocido en el servidor';
-          console.error('Error en la solicitud:', errorMessage);
+          if (response.status === 401) {
+            // Credenciales no válidas desde el backend
+            showAlertWithTitleAndMessage('Error', 'Usuario o contraseña incorrectos');
+            setTimeout(() => {
+              hideAlert();
+            }, 1500);
+          } else {
+            const errorMessage = data.error || 'Error desconocido en el servidor';
+            console.error('Error en la solicitud:', errorMessage);
+          }
           return;
         }
   
         const data = await response.json();
   
         if (data.success) {
+          showAlertWithTitleAndMessage('¡Hola!', 'Sesión iniciada correctamente');
+          console.log('Datos de usuario recibidos del servidor:', data.usuario);
+          const { nombre, apellido, id } = data.usuario;
+          dispatch(iniciarSesion({ nombre: nombre, apellido: apellido, id: id }));
+          setTimeout(() => {
+            hideAlert();
+            navigation.replace('Main');
+          }, 1500);
           // Las credenciales son válidas, navega a 'Main'
-          navigate('Main');
+          // navigate('Main');
         } else {
+          showAlertWithTitleAndMessage('Error', 'Credenciales no válidas');
+
+          setTimeout(() => {
+            hideAlert();
+          }, 1500);
           // Las credenciales no son válidas
-          console.error('Credenciales no válidas');
+          console.error('Credenciales no válidas desde el front');
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
       }
+    }
+  };
+
+  const showAlertWithTitleAndMessage = (title, message, callback) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setShowAlert(true); // Muestra la alerta
+    setAlertCallback(callback);
+  };
+
+  const hideAlert = () => {
+    setShowAlert(false); // Oculta la alerta
+    if (alertCallback) {
+      alertCallback();
     }
   };
 
@@ -106,17 +167,20 @@ export default function Log({navigation: {navigate}}){
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
 
-      <View style={styles.socialMediaContainer}> 
-        <Text style={styles.subText}>o continúa con</Text>
-        <View style={styles.socialMediaIconsContainer} >
-          <Image style={styles.socialMediaIcon} source={require('../../assets/images/login/facebook.svg')} />
-          <Image style={styles.socialMediaIcon} source={require('../../assets/images/login/google.svg')} />
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.registerAcount} onPress={()=> navigate('Register')}>
+      <TouchableOpacity style={styles.registerAcount} onPress={()=> navigation.replace('Register')}>
         <Text style={styles.registerAcountText} >Registrarse</Text>
       </TouchableOpacity>
+
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title={alertTitle}
+        message={alertMessage}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={false}
+      />
 
     </SafeAreaView>
   );
@@ -124,10 +188,12 @@ export default function Log({navigation: {navigate}}){
 
 const styles= StyleSheet.create({
   logo: {
-    width: 270,
-    height: 220,
+    width: 280,
+    height: 260,
     contentFit: 'contain',
-    marginBottom: 40,
+    marginBottom: 20,
+    // borderWidth: 2,
+    // borderColor: 'red',
   },
   container: {
     flex: 1,
@@ -136,29 +202,8 @@ const styles= StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
-  logoContainer: {
-    backgroundColor: '#329b66',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: '100%',
-    height: '40%',
-    borderBottomLeftRadius: 110,
-    borderBottomRightRadius: 110,
-  },
-  after: {
-    flex: 1,
-  },
-  dataContainer: {
-    width: '80%',
-    borderRadius: 15,
-    shadowRadius: 3.84,
-    padding: 15,
-    marginTop: 35,
-    alignItems: 'center',
-  },
   inputsContainer: {
-    minHeight: 164,
+    minHeight: 154,
     width: '100%',
     marginBottom: 5,
     justifyContent: 'space-between',
@@ -174,7 +219,7 @@ const styles= StyleSheet.create({
     fontSize: 16,
     borderWidth: 2,
     borderColor: '#fff',
-    marginBottom: 10,
+    marginBottom: 5,
     backgroundColor: 'rgba(144, 226, 111, 0.34)',
     paddingLeft: 30,
   },
@@ -183,8 +228,8 @@ const styles= StyleSheet.create({
     height: 75,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 25,
-    marginTop: 37,
+    marginBottom: 20,
+    marginTop: 20,
     width: '100%',
     borderRadius: 10,
   },
@@ -200,7 +245,7 @@ const styles= StyleSheet.create({
     fontWeight: 'bold',
     color: '#FF7670',
     // backgroundColor: '#FF7670',
-    marginBottom: 10,
+    marginBottom: 5,
     // marginTop: 5,
   },
   subText: {
@@ -209,29 +254,11 @@ const styles= StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     color: '#B0B0B0',
-    fontSize: 16,
+    fontSize: 14,
     paddingRight: 10,
   },
-  socialMediaContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    gap: 10,
-    width: 150,
-    alignItems: 'center',
-  },
-  socialMediaIconsContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 15,
-  },
-  socialMediaIcon: {
-    width: 50,
-    height: 50,
-  },
   registerAcount: {
-    marginTop: 30,
+    marginTop: 5,
     alignItems: 'center',
   },
   registerAcountText: {

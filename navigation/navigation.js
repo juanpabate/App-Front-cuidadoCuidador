@@ -4,6 +4,8 @@ import Log from "../components/Log/Login";
 import Register from "../components/Log/Register";
 import Home from "../components/Home";
 import Notifications from "../components/Notifications";
+import Foro from "../components/Foro";
+import PostForo from "../components/PostForo";
 import { Image } from 'expo-image';
 import { View , Keyboard} from "react-native";
 import { useState, useEffect } from "react";
@@ -41,6 +43,7 @@ export function MyStack (){
             <Stack.Screen name="Login" component={Log} />
             <Stack.Screen name="Register" component={Register} options={{animationEnabled: false}}/>
             <Stack.Screen name="Main" component={TabNavigation} />
+            {/* <Stack.Screen name="PostForo" component={PostForo} /> */}
         </Stack.Navigator>
     )
 };
@@ -80,17 +83,8 @@ export function TabNavigation() {
     return (
       <Tab.Navigator screenOptions={{ headerShown: false, 
         tabBarStyle: {
-          // position: 'absolute',
           height: 80,
-          marginTop: 10,
           display: keyboardActive ? 'none' : 'flex',
-          // width: '90%',
-          // marginHorizontal: 18,
-          // padding: 5,
-          // borderTopLeftRadius: 30,
-          // borderTopRightRadius: 30,
-          // justifyContent: 'center',
-          // alignItems: 'center'
         }
       }}
       >
@@ -143,8 +137,8 @@ export function TabNavigation() {
             tabBarLabel: () => null,
             }}
         />
-        <Tab.Screen name="Foro" 
-            component={Notifications}
+        <Tab.Screen name="ForoStack" 
+            component={ForoNavigator}
             options={{
             tabBarIcon: ({ focused }) =>
                 tabBarIcon(
@@ -156,5 +150,14 @@ export function TabNavigation() {
             }}
         />
       </Tab.Navigator>      
+    );
+  };
+
+  export function ForoNavigator() {
+    return (
+      <Stack.Navigator screenOptions={{headerShown: false}} >
+        <Stack.Screen name="Foro" component={Foro} />
+        <Stack.Screen name="PostForo" component={PostForo} />
+      </Stack.Navigator>
     );
   }
