@@ -264,6 +264,6 @@ const styles= StyleSheet.create({
   registerAcountText: {
     color: '#7FAF69',
     fontSize: 18,
-    fontWeight: 500,
+    fontWeight: '500',
   },
 });

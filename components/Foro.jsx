@@ -100,7 +100,7 @@ const Foro = ({navigation}) => {
   
       const dataFavoritos = await responseFavoritos.json();
 
-      console.log(dataFavoritos);
+      // console.log(dataFavoritos);
 
       setFavoritos(dataFavoritos);
   
