@@ -278,6 +278,10 @@ const PostForo = ({ route, navigation }) => {
 
       <Image style={styles.banner} source={require('../assets/images/foro/banner.png')} />
 
+      <TouchableOpacity style={styles.backButton} onPress={()=> navigation.goBack()}>
+        <Text style={styles.backButtonText}>Atrás</Text>
+      </TouchableOpacity>
+
       <View style={styles.postContainer}>
 
         {/* <Image style={styles.postImage} source={require('../assets/images/home/userPhoto.png')} /> */}
@@ -505,7 +509,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F3F3',
     padding: 20,
     // paddingBottom: 290,
-    paddingTop: 25,
+    paddingTop: 35,
     paddingBottom: 0,
     // justifyContent: 'center',
     flex: 1,
@@ -593,6 +597,19 @@ const styles = StyleSheet.create({
     // width: '100%'
     flex: 1
   },
+  backButtonText: {
+    color: '#E59850',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  backButton: {
+    // borderWidth: 2,
+    // borderColor: 'red',
+    width: 60,
+    alignItems: 'center',
+    marginBottom: 10
+  },
+
 
   
   

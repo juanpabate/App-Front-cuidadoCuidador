@@ -311,7 +311,7 @@ const styles= StyleSheet.create({
     paddingBottom: 290,
     // borderWidth: 2,
     // borderColor: 'red',
-    paddingTop: 25,
+    paddingTop: 35,
   },
   banner: {
     width: '100%',
