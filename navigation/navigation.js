@@ -6,6 +6,9 @@ import Home from "../components/Home";
 import Notifications from "../components/Notifications";
 import Foro from "../components/Foro";
 import PostForo from "../components/PostForo";
+import ZonaDelCuerpo from "../components/GuiaEjercicios/ZonaDelCuerpo";
+import ListaEjercicios from "../components/GuiaEjercicios/ListaEjercicios";
+import Ejercicio from "../components/GuiaEjercicios/Ejercicio";
 import { Image } from 'expo-image';
 import { View , Keyboard} from "react-native";
 import { useState, useEffect } from "react";
@@ -101,7 +104,7 @@ export function TabNavigation() {
             tabBarLabel: () => null, //ARROJAR UN OBJETO NULL PARA ANULAR EL NOMBRE DEL TAB
           }}
         />
-        <Tab.Screen name="Notificaciones" 
+        {/* <Tab.Screen name="Notificaciones" 
             component={Notifications}
             options={{
             tabBarIcon: ({ focused }) =>
@@ -112,7 +115,7 @@ export function TabNavigation() {
                 ),
             tabBarLabel: () => null,
             }}
-        />
+        /> */}
         <Tab.Screen name="Tareas" 
             component={Notifications}
             options={{
@@ -126,7 +129,7 @@ export function TabNavigation() {
             }}
         />
         <Tab.Screen name="Ejercicios" 
-            component={Notifications}
+            component={GuiaEjerciciosNavigator}
             options={{
             tabBarIcon: ({ focused }) =>
                 tabBarIcon(
@@ -158,6 +161,16 @@ export function TabNavigation() {
       <Stack.Navigator screenOptions={{headerShown: false}} >
         <Stack.Screen name="Foro" component={Foro} />
         <Stack.Screen name="PostForo" component={PostForo} />
+      </Stack.Navigator>
+    );
+  }
+
+  export function GuiaEjerciciosNavigator() {
+    return (
+      <Stack.Navigator screenOptions={{headerShown: false}} >
+        <Stack.Screen name="Zona" component={ZonaDelCuerpo} />
+        <Stack.Screen name="ListaEjercicios" component={ListaEjercicios} />
+        <Stack.Screen name="Ejercicio" component={Ejercicio} />
       </Stack.Navigator>
     );
   }
