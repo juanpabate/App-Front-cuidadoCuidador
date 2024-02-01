@@ -1,25 +1,38 @@
-import { Text, TextInput, TouchableOpacity, View, StyleSheet, StatusBar} from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet, StatusBar, ScrollView} from "react-native";
+import { Image } from 'expo-image';
+
 import { useState } from "react";
 
 
 export default function Register({navigation}){
 
-  const [user, setUser]= useState('');
+  const [nombre, setNombre]= useState('');
+  const [apellido, setApellido]= useState('');
   const [password, setPassword]= useState('');
   const [email, setEmail]= useState('');
-  const [userError, setUserError]= useState(false);
+
+  const [nombreError, setNombreError]= useState(false);
+  const [apellidoError, setApellidoError]= useState(false);
   const [passwordError, setPasswordError]= useState(false);
   const [emailError, setEmailError]= useState(false);
 
   const [emailErrorMensaje, setEmailErrorMensaje]= useState('Por favor rellene todos los campos');
 
 
-  const handleUser= (e)=>{
-    setUserError(false);
+  const handleNombre= (e)=>{
+    setNombreError(false);
     if(e.nativeEvent.text == ''){
-      setUserError(true);
+      setNombreError(true);
     }
-    setUser(e.nativeEvent.text);
+    setNombre(e.nativeEvent.text);
+  };
+
+  const handleApellido= (e)=>{
+    setApellidoError(false);
+    if(e.nativeEvent.text == ''){
+      setApellidoError(true);
+    }
+    setApellido(e.nativeEvent.text);
   };
 
   const handlePassword= (e)=>{
@@ -42,8 +55,9 @@ export default function Register({navigation}){
     const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     const validateEmail = emailRegExp.test(email);
   
-    if (!user || !password || !email) {
-      setUserError(true);
+    if (!nombre || !password || !email || !apellido) {
+      setNombreError(true);
+      setApellidoError(true);
       setPasswordError(true);
       setEmailError(true);
       return;
@@ -63,9 +77,10 @@ export default function Register({navigation}){
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: user,
-          password: password,
+          nombre: nombre,
+          apellido: apellido,
           email: email,
+          contrasena: password,
         }),
       });
   
@@ -88,111 +103,134 @@ export default function Register({navigation}){
   };
 
   return(
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* <StatusBar backgroundColor="#329b66" barStyle="light-content"></StatusBar> */}
-      <View style={styles.logoContainer}>
-        {/* <Image source={require('../../images/Logo.png')} style={styles.logo}/> */}
+      <View style={[{width: '100%', alignItems: 'center'}]}>
+        <Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
       </View>
+      
       <View style={styles.dataContainer}>
         <View style={styles.inputsContainer}>
-          <TextInput textAlign="center" style={styles.input} placeholder="Nombre" placeholderTextColor="#fff" selectionColor={'#fff'} autoCorrect={false} onChange={handleUser}></TextInput>
-          {userError== true && 
-          <Text style={styles.error}>Por favor rellene todos los campos</Text>
-          }
-          <TextInput textAlign="center" style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#fff" selectionColor={'#fff'} autoCorrect={false} onChange={handleEmail}></TextInput>
-          {emailError== true && 
-          <Text style={styles.error}> {emailErrorMensaje} </Text>
-          }
-          <TextInput textAlign="center" style={styles.input} placeholder="Contraseña" placeholderTextColor="#fff" selectionColor={'#fff'} secureTextEntry={true} onChange={handlePassword}></TextInput>
-          {passwordError== true && 
-          <Text style={styles.error}>Por favor rellene todos los campos</Text>
-          }
+
+          <View style={[{width: '100%', alignItems: 'center'}]}>
+            <TextInput textAlign="center" style={styles.input} placeholder="Nombre" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleNombre}></TextInput>
+            {nombreError== true && 
+            <Text style={styles.error}>Por favor rellene todos los campos</Text>
+            }
+          </View>
+          
+          <View style={[{width: '100%', alignItems: 'center'}]}>
+            <TextInput textAlign="center" style={styles.input} placeholder="Apellido" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleApellido}></TextInput>
+            {apellidoError== true && 
+            <Text style={styles.error}>Por favor rellene todos los campos</Text>
+            }
+          </View>
+
+          <View style={[{width: '100%', alignItems: 'center'}]}>
+            <TextInput textAlign="center" style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleEmail}></TextInput>
+            {emailError== true && 
+            <Text style={styles.error}> {emailErrorMensaje} </Text>
+            }
+          </View>
+          
+          <View style={[{width: '100%', alignItems: 'center'}]}>
+            <TextInput textAlign="center" style={styles.input} placeholder="Contraseña" placeholderTextColor="#7FAF69" selectionColor={'#fff'} secureTextEntry={true} onChange={handlePassword}></TextInput>
+            {passwordError== true && 
+            <Text style={styles.error}>Por favor rellene todos los campos</Text>
+            }
+          </View>
+          
         </View>
+
         <TouchableOpacity style={styles.buttonContainer} onPress={handleNavigate}>
-          <Text style={styles.buttonText}>Registrarse</Text>
+          <Text style={styles.buttonText}>Envía registro</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.registerAcount} onPress={()=> navigation.replace('Login')}>
+
+        <View style={[{width: '30%', height: 2, backgroundColor: '#D9D9D9', marginBottom: 20}]}></View>
+
+
+        <Text style={[{color:'#7FAF69', fontSize: 18}]}>¿Ya tienes una cuenta?</Text>
+
+
+        <TouchableOpacity style={styles.iniciarSesion} onPress={()=> navigation.replace('Login')}>
           <Text style={styles.subText} >Iniciar sesión</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles= StyleSheet.create({
   logo: {
-    width: 260,
+    width: 120,
+    height: 120,
     contentFit: 'contain'
   },
   container: {
-    alignItems: 'center',
-    paddingTop: 30,
+    // alignItems: 'center',
+    paddingTop: 50,
     flex: 1,
-    backgroundColor: '#34a666',
-  },
-  logoContainer: {
-    backgroundColor: '#329b66',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: '100%',
-    height: '40%',
-    borderBottomLeftRadius: 110,
-    borderBottomRightRadius: 110,
-  },
-  after: {
-    flex: 1,
+    backgroundColor: '#fff',
+    // justifyContent: 'center'
   },
   dataContainer: {
-    width: '80%',
+    width: '100%',
     borderRadius: 15,
     shadowRadius: 3.84,
     padding: 15,
-    marginTop: 35,
+    paddingHorizontal: 20,
+    // marginTop: 35,
     alignItems: 'center',
   },
   inputsContainer: {
-    minHeight: 200,
+    // minHeight: 200,
     width: '100%',
     marginBottom: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: 15
   },
   input: {
     width: '100%',
-    borderRadius: 25,
-    color: 'white',
-    height: 60,
-    fontSize: 25,
+    borderRadius: 10,
+    color: '#7FAF69',
+    height: 70,
+    fontSize: 16,
     borderWidth: 2,
     borderColor: '#fff',
-    marginBottom: 10,
+    marginBottom: 5,
+    backgroundColor: 'rgba(144, 226, 111, 0.34)',
+    textAlign: 'left',
+    // alignItems: 'flex-start'
+    paddingLeft: 30,
   },
   buttonContainer: {
     backgroundColor: '#fff',
-    height: 55,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 5,
+    marginBottom: 30,
     marginTop: 5,
-    width: '70%',
-    borderRadius: 25,
+    width: '40%',
+    borderRadius: 10,
+    backgroundColor: '#7FAF69'
   },
   buttonText:{
     // fontWeight: 'bold',
-    color: '#329b66',
-    fontSize: 22,
+    color: '#fff',
+    fontSize: 16,
   },
-  registerAcount: {
+  iniciarSesion: {
     height: 25,
-    marginTop: 20,
-    width: '45%',
+    marginTop: 10,
+    width: '40%',
     justifyContent: 'center',
-    fontSize: 10,
-    backgroundColor: '#2f8e5a',
+    backgroundColor: '#7FAF69',
+    borderRadius: 10,
+    height: 30
   },
   subText: {
-    fontSize: 12,
+    fontSize: 15,
     textAlign: 'center',
     color: '#fff',
     // fontWeight: 'bold',
@@ -200,11 +238,13 @@ const styles= StyleSheet.create({
   error: {
     textAlign: 'center',
     width: '80%',
-    color: 'white',
+    color: '#FF7670',
     // fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: '#FF7670',
-    marginBottom: 10,
+    // color: 'white',
+    // backgroundColor: '#FF7670',
+    position: 'absolute',
+    bottom: -14
+    // marginBottom: 10,
     // marginTop: 5,
   }
 });

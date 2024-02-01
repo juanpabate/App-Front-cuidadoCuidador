@@ -168,7 +168,7 @@ export default function Log({navigation}){
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.registerAcount} onPress={()=> navigation.replace('Register')}>
-        <Text style={styles.registerAcountText} >Registrarse</Text>
+        <Text style={styles.registerAcountText} >Regístrate aquí</Text>
       </TouchableOpacity>
 
       <AwesomeAlert
@@ -260,10 +260,14 @@ const styles= StyleSheet.create({
   registerAcount: {
     marginTop: 5,
     alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 5,
+    // borderRadius: 10,
+    width: '45%'
   },
   registerAcountText: {
     color: '#7FAF69',
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: '500',
   },
 });

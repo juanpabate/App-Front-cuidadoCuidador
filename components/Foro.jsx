@@ -190,7 +190,7 @@ const Foro = ({navigation}) => {
       <Image style={styles.banner} source={require('../assets/images/foro/banner.png')} />
 
       <View style={styles.inputContainer}>
-        <Image style={styles.inputImage} source={require('../assets/images/home/userPhoto.png')} />
+        <Image style={styles.inputImage} source={require('../assets/images/home/user.png')} />
         <View style={styles.inputSend}>
           <TextInput style={styles.input} placeholder='Pregunta en el foro...' placeholderTextColor={'#C5C0C0'} selectionColor={'#000'}  multiline={true} onChange={handleText} value={text} />
           <TouchableOpacity style={styles.sendButton} onPress={handleEnviarPublicacion}>
@@ -342,6 +342,7 @@ const styles= StyleSheet.create({
   inputImage: {
     width: 55,
     height: 55,
+    borderRadius: 10
   },
   inputContainer: {
     flexDirection: 'row',

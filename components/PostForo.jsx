@@ -351,7 +351,7 @@ const PostForo = ({ route, navigation }) => {
           {
             isReply &&
             <View style={styles.inputContainer}>
-              <Image style={styles.inputImage} source={require('../assets/images/home/userPhoto.png')} />
+              <Image style={styles.inputImage} source={require('../assets/images/home/user.png')} />
               <View style={styles.inputSend}>
                 <TextInput style={styles.input} 
                            placeholder='Agrega un comentario...' 
@@ -372,7 +372,7 @@ const PostForo = ({ route, navigation }) => {
           {
             isEditing &&
             <View style={styles.inputContainer}>
-              <Image style={styles.inputImage} source={require('../assets/images/home/userPhoto.png')} />
+              <Image style={styles.inputImage} source={require('../assets/images/home/user.png')} />
               <View style={styles.inputSend}>
                 <TextInput style={[styles.input, {borderColor: '#E59850', borderWidth: 2}]} 
                            placeholder='Agrega un comentario...' 
@@ -563,6 +563,7 @@ const styles = StyleSheet.create({
   inputImage: {
     width: 55,
     height: 55,
+    borderRadius: 10
   },
   inputContainer: {
     flexDirection: 'row',

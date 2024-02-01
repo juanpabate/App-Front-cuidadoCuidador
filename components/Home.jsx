@@ -3,6 +3,8 @@ import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+
 
 
 const COLORES= {
@@ -21,18 +23,21 @@ const CARDS_DATA = [
     title: 'Tareas paciente',
     color: '#7FAF69',
     icon: require('../assets/images/home/tareasPaciente.svg'),
+    navigate: 'Tareas'
   },
   {
     id: 2,
     title: 'Guía de ejercicios',
     color: '#45B3CB',
-    icon: require('../assets/images/home/guiaEjercicios.svg')
+    icon: require('../assets/images/home/guiaEjercicios.svg'),
+    navigate: 'Ejercicios'
   },
   {
     id: 3,
     title: 'Foro',
     color: '#E59850',
-    icon: require('../assets/images/home/foro.svg')
+    icon: require('../assets/images/home/foro.svg'),
+    navigate: 'ForoStack'
   },
 ];
 
@@ -72,13 +77,13 @@ const TASKS = [
 
 
 //COMPONENTE DE LA CARD
-const Card = ({ title, icon, bgColor }) => {
+const Card = ({ title, icon, bgColor, navigate }) => {
   const navigation = useNavigation();
 
   return (
     <TouchableWithoutFeedback
       style={[styles.card, { backgroundColor: bgColor }]}
-      onPress={() => navigation.navigate('Notificaciones')}
+      onPress={() => navigation.navigate(navigate)}
     >
       <Image style={styles.cardLogo} source={icon} />
       <Text style={styles.cardTitle}>{title}</Text>
@@ -128,20 +133,26 @@ const separatorHorizontalChat = () => {
 
 const Home = () => {
 
+  const usuario = useSelector((state) => state?.usuario);
+
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} >
 
         <View style={styles.header} >
           <View style={styles.welcome} >
-            <Image style={styles.welcomeImage} source={require('../assets/images/home/userPhoto.png')}/>
+            <Image style={styles.welcomeImage} source={require('../assets/images/home/user.png')}/>
             <View>
               <Text style={styles.welcomeText}>Hola,</Text>
-              <Text style={styles.welcomeTextBold}>Carolina 👋</Text> 
+              <Text style={styles.welcomeTextBold}>{usuario.nombre} 👋</Text> 
             </View>
           </View>
           {/* <Image style={styles.logo} source={require('../assets/images/logo.png')}/> */}
-          <Image style={styles.hamburger} source={require('../assets/images/home/hamburger.svg')}/>
+          <TouchableOpacity style={[{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8}]}>
+            <Image style={styles.hamburger} source={require('../assets/images/home/logOut.svg')}/>
+            <Text style={[{fontSize: 18, color: '#949494'}]}>Salir</Text>
+          </TouchableOpacity>
         </View>
 
         
@@ -149,7 +160,7 @@ const Home = () => {
         <FlatList
           data={CARDS_DATA}
           renderItem={({ item }) => (
-            <Card title={item.title} icon={item.icon} bgColor={item.color}/>
+            <Card title={item.title} icon={item.icon} bgColor={item.color} navigate={item.navigate}/>
           )}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={separatorHorizontalCards}
@@ -256,7 +267,7 @@ const styles= StyleSheet.create({
     width: 25,
     height: 25,
     contentFit: 'contain',
-    marginRight: 20,
+    // marginRight: 20,
   },
   welcome: {
     // borderColor: 'red',
@@ -271,6 +282,7 @@ const styles= StyleSheet.create({
   welcomeImage: {
     width: 55,
     height: 55,
+    borderRadius: 10
   },
   welcomeText: {
     fontSize: 20
