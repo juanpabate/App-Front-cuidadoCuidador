@@ -27,20 +27,6 @@ export default function Log({navigation}){
   const [alertMessage, setAlertMessage] = useState('');
   const [alertCallback, setAlertCallback] = useState(null);
 
-  //REVISAR SI EL USUARIO YA ESTÁ LOGEADO
-  const checkUserSession = async () => {
-    const storedUserData = await AsyncStorage.getItem('userData');
-    if (storedUserData) {
-      // Usuario autenticado previamente, redirige a la pantalla principal
-      const userData = JSON.parse(storedUserData);
-      dispatch(iniciarSesion(userData));
-      navigation.replace('Main');
-    }
-  };
-
-  useEffect(() => {
-    checkUserSession();
-  }, []);
 
   useEffect(()=>{
     if(email!== ' ' && password!== ' '){

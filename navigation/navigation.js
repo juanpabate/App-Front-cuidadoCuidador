@@ -12,6 +12,12 @@ import Ejercicio from "../components/GuiaEjercicios/Ejercicio";
 import { Image } from 'expo-image';
 import { View , Keyboard} from "react-native";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { iniciarSesion, cerrarSesion } from "../context/userSlice";
+
+
+
 
 const Stack= createStackNavigator();
 
@@ -41,14 +47,49 @@ const tabBarIcon = (icon, iconActive, focused) => {
 
 
 export function MyStack (){
-    return(
-        <Stack.Navigator screenOptions={{headerShown: false}} >
-            <Stack.Screen name="Login" component={Log} />
-            <Stack.Screen name="Register" component={Register} options={{animationEnabled: false}}/>
+
+  const dispatch = useDispatch();
+  const [userDataAvailable, setUserDataAvailable] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData) {
+        const userData = JSON.parse(storedUserData);
+        dispatch(iniciarSesion(userData));
+        setUserDataAvailable(true);
+      }
+      setLoading(false);
+    };
+
+    checkUserSession();
+  }, [dispatch]);
+
+
+  if (loading) {
+    // Puedes mostrar un componente de carga mientras se verifica la sesión
+    return;
+  }
+
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {userDataAvailable ? (
+          <>
             <Stack.Screen name="Main" component={TabNavigation} />
-            {/* <Stack.Screen name="PostForo" component={PostForo} /> */}
-        </Stack.Navigator>
-    )
+            <Stack.Screen name="Login" component={Log} />
+            <Stack.Screen name="Register" component={Register} options={{ animationEnabled: false }} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={Log} />
+            <Stack.Screen name="Register" component={Register} options={{ animationEnabled: false }} />
+            <Stack.Screen name="Main" component={TabNavigation} />
+          </>
+        )}
+      </Stack.Navigator>
+    );
 };
 
 export function TabNavigation() {
