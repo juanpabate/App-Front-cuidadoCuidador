@@ -1,9 +1,15 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Image } from 'expo-image';
+import ImageModal from 'react-native-image-modal';
+
 
 import React from 'react'
 
 const Ejercicio = ({navigation}) => {
+
+  // const imageUri= 'https://media.post.rvohealth.io/wp-content/uploads/sites/3/2023/12/400x400_Exercises_for_Treating_and_Preventing_Runners_Knee_Straight_Leg_Lift.gif';
+  const imageUri= 'https://www.icegif.com/wp-content/uploads/2022/07/icegif-470.gif'
+
   return (
     <View style={styles.mainContainer}>
       <Image source={require('../../assets/images/GuiaEjercicios/banner.png')} style={styles.banner} />
@@ -17,7 +23,20 @@ const Ejercicio = ({navigation}) => {
       <View style={styles.cardContainer}>
         <Text style={[{fontSize: 22, color: '#45B3CB', fontWeight: 'bold'}]}>Nombre del ejercicio</Text>
         <View style={[{width: '100%', alignItems: 'center', marginVertical: 15, gap: 10}]}>
-          <Image source={'https://media.post.rvohealth.io/wp-content/uploads/sites/3/2023/12/400x400_Exercises_for_Treating_and_Preventing_Runners_Knee_Straight_Leg_Lift.gif'} style={[{width: 150, height: 150,borderRadius: 15}]}/>
+          
+        <View style={{borderRadius: 15, overflow: 'hidden'}}>
+          <ImageModal
+            resizeMode="contain"
+            imageBackgroundColor="#ffffff"
+            source={{ uri: imageUri }}
+            style={{ width: 240, height: 150,borderRadius: 15 }}
+            isTranslucent={false}
+          />
+        </View>
+          
+          
+          
+          {/* <Image source={'https://media.post.rvohealth.io/wp-content/uploads/sites/3/2023/12/400x400_Exercises_for_Treating_and_Preventing_Runners_Knee_Straight_Leg_Lift.gif'} style={[{width: 150, height: 150,borderRadius: 15}]}/> */}
           <Text style={[{fontSize: 13, color: '#898989'}]}>Descripción del ejercicio...  Lorem ipsum dolor sit amet consectetur adipiscing elit fames curae vulputate ultriciesLorem ipsum dolor sit amet consectetur adipiscing elit.</Text>
         </View>
 
