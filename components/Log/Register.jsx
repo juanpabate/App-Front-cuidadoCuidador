@@ -1,6 +1,9 @@
 import { Text, TextInput, TouchableOpacity, View, StyleSheet, StatusBar, ScrollView} from "react-native";
 import { Image } from 'expo-image';
 
+import AwesomeAlert from "react-native-awesome-alerts";
+
+
 import { useState } from "react";
 
 
@@ -10,13 +13,44 @@ export default function Register({navigation}){
   const [apellido, setApellido]= useState('');
   const [password, setPassword]= useState('');
   const [email, setEmail]= useState('');
+  const [verifyPassword, setVerifyPassword]= useState('');
 
   const [nombreError, setNombreError]= useState(false);
   const [apellidoError, setApellidoError]= useState(false);
   const [passwordError, setPasswordError]= useState(false);
   const [emailError, setEmailError]= useState(false);
+  const [verifyPasswordError, setVerifyPasswordError]= useState(false);
 
   const [emailErrorMensaje, setEmailErrorMensaje]= useState('Por favor rellene todos los campos');
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertTitle, setAlertTitle] = useState(''); 
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertCallback, setAlertCallback] = useState(null);
+
+  const showAlertWithTitleAndMessage = (title, message, callback) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setShowAlert(true); // Muestra la alerta
+    setAlertCallback(callback);
+  };
+
+  const hideAlert = () => {
+    setShowAlert(false); // Oculta la alerta
+    if (alertCallback) {
+      alertCallback();
+    }
+  };
+
+
+  const verifySpaces= (text, setInput)=>{
+    const hasSpaces = /\s/.test(text);
+
+    if(hasSpaces){
+      return;
+    }
+    setInput(text);
+  };
 
 
   const handleNombre= (e)=>{
@@ -24,7 +58,8 @@ export default function Register({navigation}){
     if(e.nativeEvent.text == ''){
       setNombreError(true);
     }
-    setNombre(e.nativeEvent.text);
+    verifySpaces(e.nativeEvent.text, setNombre);
+    // setNombre(e.nativeEvent.text);
   };
 
   const handleApellido= (e)=>{
@@ -32,7 +67,8 @@ export default function Register({navigation}){
     if(e.nativeEvent.text == ''){
       setApellidoError(true);
     }
-    setApellido(e.nativeEvent.text);
+    verifySpaces(e.nativeEvent.text, setApellido)
+    // setApellido(e.nativeEvent.text);
   };
 
   const handlePassword= (e)=>{
@@ -43,29 +79,47 @@ export default function Register({navigation}){
     setPassword(e.nativeEvent.text);
   };
 
+  const handleVerifyPassword= (e)=>{
+    setVerifyPasswordError(false);
+    if(e.nativeEvent.text == ''){
+      setVerifyPasswordError(true);
+    }
+    setVerifyPassword(e.nativeEvent.text);
+  };
+
   const handleEmail= (e)=>{
     setEmailError(false);
     if(e.nativeEvent.text == ''){
       setEmailError(true);
     }
-    setEmail(e.nativeEvent.text);
+    verifySpaces(e.nativeEvent.text, setEmail);
   };
 
   const handleNavigate = async () => {
     const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     const validateEmail = emailRegExp.test(email);
   
-    if (!nombre || !password || !email || !apellido) {
+    if (!nombre || !password || !email || !apellido || !verifyPassword) {
       setNombreError(true);
       setApellidoError(true);
       setPasswordError(true);
       setEmailError(true);
+      setVerifyPasswordError(true);
       return;
     }
   
     if (!validateEmail) {
       setEmailError(true);
       setEmailErrorMensaje('Correo electrónico inválido');
+      return;
+    }
+
+    if (password !== verifyPassword){
+      showAlertWithTitleAndMessage('Error', 'Las contraseñas no coinciden');
+
+      setTimeout(() => {
+        hideAlert();
+      }, 1500);
       return;
     }
   
@@ -113,21 +167,21 @@ export default function Register({navigation}){
         <View style={styles.inputsContainer}>
 
           <View style={[{width: '100%', alignItems: 'center'}]}>
-            <TextInput textAlign="center" style={styles.input} placeholder="Nombre" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleNombre}></TextInput>
+            <TextInput textAlign="center" style={styles.input} placeholder="Nombre" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleNombre} value={nombre}></TextInput>
             {nombreError== true && 
             <Text style={styles.error}>Por favor rellene todos los campos</Text>
             }
           </View>
           
           <View style={[{width: '100%', alignItems: 'center'}]}>
-            <TextInput textAlign="center" style={styles.input} placeholder="Apellido" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleApellido}></TextInput>
+            <TextInput textAlign="center" style={styles.input} placeholder="Apellido" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleApellido} value={apellido}></TextInput>
             {apellidoError== true && 
             <Text style={styles.error}>Por favor rellene todos los campos</Text>
             }
           </View>
 
           <View style={[{width: '100%', alignItems: 'center'}]}>
-            <TextInput textAlign="center" style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleEmail}></TextInput>
+            <TextInput textAlign="center" style={styles.input} placeholder="Correo electrónico" placeholderTextColor="#7FAF69" selectionColor={'#fff'} autoCorrect={false} onChange={handleEmail} value={email}></TextInput>
             {emailError== true && 
             <Text style={styles.error}> {emailErrorMensaje} </Text>
             }
@@ -136,6 +190,13 @@ export default function Register({navigation}){
           <View style={[{width: '100%', alignItems: 'center'}]}>
             <TextInput textAlign="center" style={styles.input} placeholder="Contraseña" placeholderTextColor="#7FAF69" selectionColor={'#fff'} secureTextEntry={true} onChange={handlePassword}></TextInput>
             {passwordError== true && 
+            <Text style={styles.error}>Por favor rellene todos los campos</Text>
+            }
+          </View>
+
+          <View style={[{width: '100%', alignItems: 'center'}]}>
+            <TextInput textAlign="center" style={styles.input} placeholder="Confirmar contraseña" placeholderTextColor="#7FAF69" selectionColor={'#fff'} secureTextEntry={true} onChange={handleVerifyPassword}></TextInput>
+            {verifyPasswordError== true && 
             <Text style={styles.error}>Por favor rellene todos los campos</Text>
             }
           </View>
@@ -156,19 +217,30 @@ export default function Register({navigation}){
           <Text style={styles.subText} >Iniciar sesión</Text>
         </TouchableOpacity>
       </View>
+
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title={alertTitle}
+        message={alertMessage}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={false}
+      />
     </ScrollView>
   );
 }
 
 const styles= StyleSheet.create({
   logo: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     contentFit: 'contain'
   },
   container: {
     // alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 30,
     flex: 1,
     backgroundColor: '#fff',
     // justifyContent: 'center'
@@ -177,7 +249,7 @@ const styles= StyleSheet.create({
     width: '100%',
     borderRadius: 15,
     shadowRadius: 3.84,
-    padding: 15,
+    // padding: 15,
     paddingHorizontal: 20,
     // marginTop: 35,
     alignItems: 'center',
@@ -188,7 +260,8 @@ const styles= StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 15
+    paddingBottom: 10,
+    gap: 10
   },
   input: {
     width: '100%',
@@ -243,7 +316,7 @@ const styles= StyleSheet.create({
     // color: 'white',
     // backgroundColor: '#FF7670',
     position: 'absolute',
-    bottom: -14
+    bottom: -12
     // marginBottom: 10,
     // marginTop: 5,
   }

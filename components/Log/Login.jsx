@@ -8,6 +8,9 @@ import NetInfo from "@react-native-community/netinfo";
 import { useDispatch } from "react-redux";
 import { iniciarSesion, cerrarSesion } from "../../context/userSlice";
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 export default function Log({navigation}){
 
@@ -23,6 +26,21 @@ export default function Log({navigation}){
   const [alertTitle, setAlertTitle] = useState(''); 
   const [alertMessage, setAlertMessage] = useState('');
   const [alertCallback, setAlertCallback] = useState(null);
+
+  //REVISAR SI EL USUARIO YA ESTÁ LOGEADO
+  const checkUserSession = async () => {
+    const storedUserData = await AsyncStorage.getItem('userData');
+    if (storedUserData) {
+      // Usuario autenticado previamente, redirige a la pantalla principal
+      const userData = JSON.parse(storedUserData);
+      dispatch(iniciarSesion(userData));
+      navigation.replace('Main');
+    }
+  };
+
+  useEffect(() => {
+    checkUserSession();
+  }, []);
 
   useEffect(()=>{
     if(email!== ' ' && password!== ' '){
@@ -106,8 +124,11 @@ export default function Log({navigation}){
             hideAlert();
             navigation.replace('Main');
           }, 1500);
-          // Las credenciales son válidas, navega a 'Main'
-          // navigate('Main');
+
+          // Guardar en AsyncStorage
+          const userData = { nombre, apellido, id };
+          await AsyncStorage.setItem('userData', JSON.stringify(userData));
+
         } else {
           showAlertWithTitleAndMessage('Error', 'Credenciales no válidas');
 

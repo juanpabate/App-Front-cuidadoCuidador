@@ -5,6 +5,9 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 
 const COLORES= {
@@ -131,9 +134,21 @@ const separatorHorizontalChat = () => {
 
 
 
-const Home = () => {
+const Home = ({navigation}) => {
 
   const usuario = useSelector((state) => state?.usuario);
+
+  const handleLogout = async () => {
+    try {
+      // Elimina los datos del usuario de AsyncStorage
+      await AsyncStorage.removeItem('userData');
+      // Redirige al usuario a la pantalla de inicio de sesión
+      navigation.replace('Login'); // Asegúrate de que la pantalla de inicio de sesión se llame 'Login' o ajusta según sea necesario
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
 
 
   return (
@@ -149,7 +164,7 @@ const Home = () => {
             </View>
           </View>
           {/* <Image style={styles.logo} source={require('../assets/images/logo.png')}/> */}
-          <TouchableOpacity style={[{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8}]}>
+          <TouchableOpacity onPress={handleLogout} style={[{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8}]}>
             <Image style={styles.hamburger} source={require('../assets/images/home/logOut.svg')}/>
             <Text style={[{fontSize: 18, color: '#949494'}]}>Salir</Text>
           </TouchableOpacity>
