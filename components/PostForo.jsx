@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, ScrollView } from 'react-native';
-import { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, ScrollView, RefreshControl } from 'react-native';
+import { useState, useCallback } from 'react';
 import { Image } from 'expo-image';
 
 
@@ -270,11 +270,30 @@ const PostForo = ({ route, navigation }) => {
       // Puedes manejar el error de la manera que consideres apropiada
     });
   };
+
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    
+    try {
+      // Lógica de actualización o recarga de datos
+      await obtenerRespuestas();
+    } catch (error) {
+      console.error('Error al refrescar:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [obtenerRespuestas]);
+  
   
 
 
   return (
-    <ScrollView ref={scrollViewRef} style={styles.mainContainer}>
+    <ScrollView ref={scrollViewRef} style={styles.mainContainer}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#E59850', '#FFF']}/>} 
+    >
 
       <Image style={styles.banner} source={require('../assets/images/foro/banner.png')} />
 
@@ -343,7 +362,7 @@ const PostForo = ({ route, navigation }) => {
               idUsuario={item.IdUsuario}
               value={respuestaTexto}
               IdRespuesta={item.IdRespuesta}
-              obtenerRespuestas={obtenerRespuestas()}
+              obtenerRespuestas={obtenerRespuestas}
               key={item.IdRespuesta.toString()}
             />
           ))}
@@ -531,7 +550,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderBottomColor: 'transparent',
-    marginBottom: 25,
+    marginBottom: 35,
     
   },
   inicialContainer: {

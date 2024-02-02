@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image } from 'expo-image';
-import React, { useState } from 'react';
+import React, { useState, useCallback} from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 
 import { useSelector } from 'react-redux';
@@ -184,6 +184,23 @@ const Foro = ({navigation}) => {
     }
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    
+    try {
+      // Lógica de actualización o recarga de datos
+      await obtenerPublicaciones();
+      await obtenerFavoritos();
+    } catch (error) {
+      console.error('Error al refrescar:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [obtenerPublicaciones, obtenerFavoritos]);
+  
+
   return (
     <View style={styles.mainContainer}>
 
@@ -231,7 +248,9 @@ const Foro = ({navigation}) => {
             })}
           />
         )}
-      style={styles.postsContainer} />
+      style={styles.postsContainer} 
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#E59850', '#FFF']}/>}
+      />
 
       <View style={{ height: 350 }} />
 
