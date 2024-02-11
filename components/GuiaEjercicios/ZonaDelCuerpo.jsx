@@ -29,6 +29,14 @@ const ZonaDelCuerpo = ({navigation}) => {
               navigate={()=> navigation.navigate('ListaEjercicios', {parteDelCuerpo: 'espalda'})}/>
         <Card nombre={'Codos'}
               navigate={()=> navigation.navigate('ListaEjercicios', {parteDelCuerpo: 'codos'})}/>
+        <Card nombre={'Cadera'}
+              navigate={()=> navigation.navigate('ListaEjercicios', {parteDelCuerpo: 'cadera'})}/>
+        <Card nombre={'Muñeca'}
+              navigate={()=> navigation.navigate('ListaEjercicios', {parteDelCuerpo: 'muñeca'})}/>
+        <Card nombre={'Rodilla'}
+              navigate={()=> navigation.navigate('ListaEjercicios', {parteDelCuerpo: 'rodilla'})}/>
+        <Card nombre={'Tobillos'}
+              navigate={()=> navigation.navigate('ListaEjercicios', {parteDelCuerpo: 'tobillos'})}/>
       </View>
     </View>
   )
@@ -53,12 +61,15 @@ const styles= StyleSheet.create({
   },
   cardsContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
-    gap: 20,
-    marginTop: 15
+    gap: 10,
+    marginTop: 15,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
   card: {
-    width: '75%',
+    width: 150,
     height: 85,
     backgroundColor: '#45B3CB',
     borderRadius: 20,
@@ -67,7 +78,7 @@ const styles= StyleSheet.create({
   },
   cardText: {
     color: '#fff',
-    fontSize: 55,
+    fontSize: 25,
     fontWeight: '800',
     // fontFamily: 'Nunito'
   }
