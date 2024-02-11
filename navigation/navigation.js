@@ -3,12 +3,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Log from "../components/Log/Login";
 import Register from "../components/Log/Register";
 import Home from "../components/Home";
-import Notifications from "../components/Notifications";
 import Foro from "../components/Foro";
 import PostForo from "../components/PostForo";
 import ZonaDelCuerpo from "../components/GuiaEjercicios/ZonaDelCuerpo";
 import ListaEjercicios from "../components/GuiaEjercicios/ListaEjercicios";
 import Ejercicio from "../components/GuiaEjercicios/Ejercicio";
+import Tareas from "../components/Tareas/Tareas";
+import ProximasTareas from "../components/Tareas/ProximasTareas";
+import AgregarTarea from "../components/Tareas/AgregarTarea";
+import AgregarMedicina from "../components/Tareas/AgregarMedicina";
 import { Image } from 'expo-image';
 import { View , Keyboard} from "react-native";
 import { useState, useEffect } from "react";
@@ -158,7 +161,7 @@ export function TabNavigation() {
             }}
         /> */}
         <Tab.Screen name="Tareas" 
-            component={Notifications}
+            component={TareasNavigator}
             options={{
             tabBarIcon: ({ focused }) =>
                 tabBarIcon(
@@ -212,6 +215,17 @@ export function TabNavigation() {
         <Stack.Screen name="Zona" component={ZonaDelCuerpo} />
         <Stack.Screen name="ListaEjercicios" component={ListaEjercicios} />
         <Stack.Screen name="Ejercicio" component={Ejercicio} />
+      </Stack.Navigator>
+    );
+  }
+
+  export function TareasNavigator() {
+    return (
+      <Stack.Navigator screenOptions={{headerShown: false}} >
+        <Stack.Screen name="TareasHome" component={Tareas} />
+        <Stack.Screen name="ProximasTareas" component={ProximasTareas} />
+        <Stack.Screen name="AgregarTarea" component={AgregarTarea} />
+        <Stack.Screen name="AgregarMedicina" component={AgregarMedicina} />
       </Stack.Navigator>
     );
   }

@@ -6,7 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import TareaCard from './Tareas/TareaCard';
+import { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
+import MedicinaCard from './Tareas/MedicinaCard';
 
 
 
@@ -44,41 +48,6 @@ const CARDS_DATA = [
   },
 ];
 
-//INFORMACIÓN DE LAS TAREAS
-const TASKS = [
-  {
-    id: 1,
-    title: 'Aplicar medicina',
-    icon: require('../assets/images/home/medicina.svg'),
-  },
-  {
-    id: 2,
-    title: 'Medir ritmo cardiaco',
-    icon: require('../assets/images/home/ritmoCardiaco.svg')
-  }
-];
-
-//INFORMACIÓN DE LOS CHATS
-// const CHATS = [
-//   {
-//     id: 1,
-//     name: 'María Vélez',
-//   },
-//   {
-//     id: 2,
-//     name: 'Carlos Pérez',
-//   },
-//   {
-//     id: 3,
-//     name: 'Clara Morales',
-//   },
-//   {
-//     id: 4,
-//     name: 'Pablo Madrid',
-//   }
-// ];
-
-
 //COMPONENTE DE LA CARD
 const Card = ({ title, icon, bgColor, navigate }) => {
   const navigation = useNavigation();
@@ -94,49 +63,119 @@ const Card = ({ title, icon, bgColor, navigate }) => {
   );
 };
 
-//COMPONENTE DE LA TAREA
-const Task = ({ title, icon }) => {
-
-  return (
-    <TouchableOpacity
-      style={styles.taskCardContainer}
-    >
-      <Image style={styles.taskCardIcon} source={icon} />
-      <Text style={styles.taskCardTitle}>{title}</Text>
-      <Image style={styles.taskCardArrow} source={require('../assets/images/home/arrow.svg')} />
-    </TouchableOpacity>
-  );
-};
-
-//COMPONENTE DEL ELEMENTO DEL CHAT
-const Chat = ({ name }) => {
-
-  return (
-    <TouchableOpacity
-      style={styles.chatCard}
-    >
-      <Image style={styles.chatCardImage} source={require('../assets/images/home/userPhoto.png')} />
-      <Text style={styles.chatCardName}>{name}</Text>
-    </TouchableOpacity>
-  );
-};
-
 // SEPARADOR HORIZONTAL PARA LOS ELEMENTOS DE LA FLATLIST DE LAS CARDS
 const separatorHorizontalCards = () => {
   return <View style={{ width: 15 }} />;
 };
 
-// SEPARADOR HORIZONTAL PARA LOS ELEMENTOS DE LA FLATLIST DE LAS CARDS
-const separatorHorizontalChat = () => {
-  return <View style={{ width: 35 }} />;
-};
-
-
-
 
 const Home = ({navigation}) => {
 
   const usuario = useSelector((state) => state?.usuario);
+
+  const [tareas, setTareas]= useState([]);
+  const [proximaMedicina, setProximaMedicina]= useState();
+
+  const proximaTarea= tareas.length > 0 ? tareas[0] : null;
+
+  const getDiaSemana = (dia) => {
+    switch (dia) {
+      case 0:
+        return 'Domingo';
+      case 1:
+        return 'Lunes';
+      case 2:
+        return 'Martes';
+      case 3:
+        return 'Miercoles';
+      case 4:
+        return 'Jueves';
+      case 5:
+        return 'Viernes';
+      case 6:
+        return 'Sabado';
+      default:
+        return '';
+    }
+  };
+
+  const horaFormateada = proximaMedicina ? new Date(`1970-01-01T${proximaMedicina.hora}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }): '';
+
+
+
+  const obtenerTareasUsuario = async () => {
+    try {
+      const response = await fetch(`http://10.0.2.2:3000/tareas/${usuario.id}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener las tareas del usuario');
+      }
+      const data = await response.json();
+      setTareas(data);
+    } catch (error) {
+      console.error('Error al obtener las tareas del usuario:', error);
+    }
+  };
+
+  const obtenerMedicinasUsuario = async () => {
+    try {
+      const response = await fetch(`http://10.0.2.2:3000/medicinas/${usuario.id}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener las medicinas del usuario');
+      }
+      const medicinas = await response.json();
+      // console.log(medicinas);
+      return medicinas;
+    } catch (error) {
+      console.error('Error al obtener las medicinas del usuario:', error);
+    }
+  };
+
+  const obtenerProximaMedicina= ()=>{
+    obtenerMedicinasUsuario()
+      .then(medicinas => {
+        const fechaHoy = new Date();
+        const fechaHoyDia = fechaHoy.getDay(); // Obtener el día de la semana (0: Domingo, 1: Lunes, ..., 6: Sábado)
+        const horaHoy = fechaHoy.toTimeString(); // Obtener la hora actual
+
+        // Filtrar las medicinas que cumplen con las condiciones
+        const medicinasFiltradas = medicinas.filter(item => {
+          const fechaInicio = new Date(item.fechaInicio);
+          const fechaFinalizacion = item.fechaFinalizacion ? new Date(item.fechaFinalizacion) : undefined;
+  
+          // Verificar si el día de la semana está activo
+          const diaSemanaActivo = item[getDiaSemana(fechaHoyDia)] === 1;
+  
+          // Verificar si la fecha de finalización está definida y la fecha actual está en el rango
+          const filtroFechaFinalizacion = fechaFinalizacion ? (fechaHoy >= fechaInicio && fechaHoy <= fechaFinalizacion) : false;
+  
+          // Verificar si la fecha de finalización no está definida y la fecha actual está después de la fecha de inicio
+          const filtroFechaSinFinalizacion = !fechaFinalizacion ? (fechaHoy >= fechaInicio) : false;
+  
+          // Verificar si la hora de la medicina es posterior a la hora actual
+          const filtroHora = item.hora > horaHoy;
+  
+          return diaSemanaActivo && filtroHora && (filtroFechaFinalizacion || filtroFechaSinFinalizacion);
+        });
+        const proximaMedicina = medicinasFiltradas.length > 0 ? medicinasFiltradas[0] : null;
+        setProximaMedicina(proximaMedicina);
+        // console.log(medicinasFiltradas);
+      })
+      .catch(error => {
+        console.error('Error al obtener las medicinas del usuario:', error);
+      });
+  }
+
+  useEffect(() => {
+    obtenerTareasUsuario();
+    obtenerProximaMedicina();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      obtenerTareasUsuario();
+      obtenerProximaMedicina();
+    }, [usuario])
+  );
 
   const handleLogout = async () => {
     try {
@@ -187,18 +226,47 @@ const Home = ({navigation}) => {
         <View style={styles.sectionContainer} >
 
           <View style={styles.sectionTextContainer}>
-            <Text style={styles.sectionTitle}>Tareas</Text>
-            <TouchableOpacity>
+            <Text style={styles.sectionTitle}>{tareas.length > 0 ? 'Próxima tarea' : 'Aún no hay tareas'}</Text>
+            {
+              tareas.length > 0 && 
+            <TouchableOpacity onPress={()=> navigation.navigate('ProximasTareas')}>
               <Text style={styles.sectionTouchable}>Ver todas</Text>
             </TouchableOpacity>
+            }
+            
           </View>
           
           <View style={styles.tasksContainer}>
-            {
-            TASKS.map(item=>(
-              <Task title={item.title} icon={item.icon} key={item.id} />
-            ))
-            }
+            <TareaCard 
+              nombre={proximaTarea ? proximaTarea.nombreTarea : ''}
+              fecha={proximaTarea ? new Date(proximaTarea.Fecha).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: '2-digit'}) : ''}
+              hora={proximaTarea ? new Date(`1970-01-01T${proximaTarea.Hora}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+              lugar={proximaTarea ? proximaTarea.Lugar : ''}
+              descripcion={proximaTarea ? proximaTarea.Descripcion : ''}
+              isEmpty={tareas.length > 0 ?  false : true}
+              navigation={navigation}
+              isHome={true}
+            />
+          </View>
+      
+        </View>
+
+        <View style={styles.sectionContainer} >
+
+          <View style={styles.sectionTextContainer}>
+            <Text style={proximaMedicina ? styles.sectionTitle : {fontSize: 20, fontWeight: 'bold'}}>{proximaMedicina ? 'Próxima medicina' : 'No hay medicinas pendientes hoy'}</Text>    
+          </View>
+          
+          <View style={styles.tasksContainer}>
+            <MedicinaCard 
+              isEmpty={proximaMedicina ? false : true}
+              navigation={navigation}
+              nombre={proximaMedicina ? proximaMedicina.nombreMedicina : ''}
+              fechasSuministrada={proximaMedicina ? proximaMedicina.fechaSuministrada: ''}
+              hora={proximaMedicina ? horaFormateada : ''}
+              fechaSeleccionada={new Date()}
+              idMedicina={proximaMedicina ? proximaMedicina.idMedicina : ''}
+            />
           </View>
       
         </View>
@@ -211,21 +279,6 @@ const Home = ({navigation}) => {
           <Image style={styles.tipImage} source={require('../assets/images/home/tip.png')} />
         </View>
 
-        {/* <View style={styles.sectionContainer} >
-
-          <View style={[styles.sectionTextContainer, {marginBottom: 20} ]}>
-            <Text style={styles.sectionTitle}>Pregunta en el foro</Text>
-            <TouchableOpacity>
-              <Text style={styles.sectionTouchable}>Ir al foro</Text>
-            </TouchableOpacity>
-          </View>
-
-          <TextInput style={styles.foroInput} placeholder='Escribe algo...' placeholderTextColor="#CAC2C2" selectionColor={'#CAC2C2'}/>
-      
-        </View> */}
-        
-      {/* <View style={{ height: 60 }} /> */}
-
       </ScrollView>
 
     </SafeAreaView>
@@ -235,7 +288,7 @@ const Home = ({navigation}) => {
 
 const styles= StyleSheet.create({
   mainContainer:{
-    backgroundColor: COLORES.blanco,
+    backgroundColor: COLORES.gris,
     alignItems: 'center',
     flex: 1,
     // paddingHorizontal: 15,
@@ -332,7 +385,7 @@ const styles= StyleSheet.create({
   sectionContainer: {
     // borderColor: 'red',
     // borderWidth: 1,
-    marginTop: 20,
+    marginTop: 15,
   },
   sectionTextContainer: {
     // borderColor: 'red',
@@ -341,7 +394,7 @@ const styles= StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent:'space-between',
-    marginBottom: 20,
+    marginBottom: 10,
     paddingRight: 10,
   },
   sectionTitle: {
@@ -355,7 +408,9 @@ const styles= StyleSheet.create({
   tasksContainer: {
     // borderColor: 'red',
     // borderWidth: 1,
-    gap: 16
+    // gap: 16,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   taskCardContainer: {
     // borderColor: 'red',
@@ -383,36 +438,6 @@ const styles= StyleSheet.create({
     position: 'absolute',
     right: 35,
   },
-
-  // foroInput: {
-  //   width: '100%',
-  //   height: 60,
-  //   backgroundColor: '#fff',
-  //   borderWidth: 1,
-  //   borderColor: '#E2E2E2',
-  //   borderRadius: 16,
-  //   color: '#CAC2C2',
-  //   fontSize: 20,
-  //   paddingHorizontal: 15
-  // },
-
-  chatCard: {
-    // borderColor: 'red',
-    // borderWidth: 1,
-    alignItems: 'center',
-    gap: 10
-  },
-  chatCardImage: {
-    width: 50,
-    height: 50
-  },
-  chatCardName: {
-    fontSize: 20,
-    // borderColor: 'red',
-    // borderWidth: 1,
-    // width: '50%'
-  },
-
   tipContainer: {
     height: 140,
     width: '100%',
@@ -421,7 +446,8 @@ const styles= StyleSheet.create({
     borderRadius: 20,
     padding: 15,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 35
   },
   tipTextContainer: {
     flex: 1
