@@ -141,7 +141,7 @@ const Tareas = ({navigation}) => {
           navigation={navigation}
         />
 
-        <TouchableOpacity onPress={()=> navigation.navigate('AgregarTarea')} style={{flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20}}>
+        <TouchableOpacity onPress={()=> navigation.navigate('AgregarTarea')} style={{flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, backgroundColor: '#fff', padding: 10, borderRadius: 15}}>
           <View style={{backgroundColor: '#F4B860', borderRadius: 50, alignItems: 'center', justifyContent: 'center', width: 50, height: 50}}>
             <Image style={{width: 50, height: 50, contentFit: 'cover'}} source={require('../../assets/images/Tareas/Plus.svg')}/>
           </View>
@@ -154,7 +154,7 @@ const Tareas = ({navigation}) => {
       <>
       <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', marginBottom: 10}}>
         <View>
-          <Text style={{fontSize: 28, fontWeight: '500'}}>Medicinas hoy</Text>
+          <Text style={{fontSize: 28, fontWeight: '500'}}>Medicinas de:</Text>
           <Text style={{fontSize: 25, fontWeight: '500', color: '#F8D57E'}}>{fechaSeleccionada.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric'})}</Text>
         </View>
         <View style={{flexDirection: 'row', gap: 12}}>
@@ -210,7 +210,7 @@ const Tareas = ({navigation}) => {
         </View>
       </ScrollView>
 
-      <TouchableOpacity onPress={()=> navigation.navigate('AgregarMedicina')} style={{flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20}}>
+      <TouchableOpacity onPress={()=> navigation.navigate('AgregarMedicina')} style={{flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, backgroundColor: '#fff', padding: 10, borderRadius: 15}}>
           <View style={{backgroundColor: '#F4B860', borderRadius: 50, alignItems: 'center', justifyContent: 'center', width: 50, height: 50}}>
             <Image style={{width: 50, height: 50, contentFit: 'cover'}} source={require('../../assets/images/Tareas/Plus.svg')}/>
           </View>
