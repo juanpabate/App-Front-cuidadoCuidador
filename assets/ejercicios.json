@@ -1,0 +1,165 @@
+{
+    "Zonas del Cuerpo": [
+      {
+        "Nombre": "cuello",
+        "Ejercicios": [
+          {
+            "Nombre": "Rotación de cuello",
+            "Descripción": "Gira lentamente la cabeza hacia un lado, llevando la barbilla hacia el hombro. Mantén la posición durante unos segundos y luego gira hacia el otro lado.",
+            "Repeticiones": "5 en cada lado"
+          },
+          {
+            "Nombre": "Inclinación lateral de cuello",
+            "Descripción": "Inclina la cabeza hacia un lado, llevando la oreja hacia el hombro. Mantén la posición durante unos segundos y luego cambia de lado.",
+            "Repeticiones": "5 en cada lado"
+          },
+          {
+            "Nombre": "Flexión de cuello",
+            "Descripción": "Baja la barbilla hacia el pecho, sintiendo un estiramiento suave en la parte posterior del cuello. Mantén la posición durante unos segundos.",
+            "Repeticiones": "5 repeticiones"
+          }
+        ]
+      },
+      {
+        "Nombre": "hombros",
+        "Ejercicios": [
+          {
+            "Nombre": "Rotación de hombros hacia atrás",
+            "Descripción": "Levanta los hombros hacia las orejas y luego realiza círculos hacia atrás, manteniendo los brazos relajados.",
+            "Repeticiones": "10 en cada dirección"
+          },
+          {
+            "Nombre": "Elevaciones de brazos",
+            "Descripción": "Levanta ambos brazos hacia arriba sobre la cabeza, manteniendo los codos rectos. Baja lentamente los brazos.",
+            "Repeticiones": "10 repeticiones"
+          },
+          {
+            "Nombre": "Estiramiento de hombro cruzado",
+            "Descripción": "Cruza un brazo sobre el pecho y usa la otra mano para presionar suavemente el codo hacia el pecho. Mantén la posición.",
+            "Repeticiones": "3 en cada lado"
+          }
+        ]
+      },
+      {
+        "Nombre": "codos",
+        "Ejercicios": [
+          {
+            "Nombre": "Estiramiento de tríceps",
+            "Descripción": "Lleva un brazo sobre la cabeza y dobla el codo, colocando la mano detrás de la cabeza. Tira suavemente del codo.",
+            "Repeticiones": "3 en cada lado"
+          },
+          {
+            "Nombre": "Flexiones de muñeca",
+            "Descripción": "Extiende un brazo con la palma hacia abajo. Con la otra mano, aplica presión hacia abajo en los dedos y la mano.",
+            "Repeticiones": "3 en cada lado"
+          },
+          {
+            "Nombre": "Giros de muñeca",
+            "Descripción": "Extiende ambos brazos con los dedos hacia arriba y gira las muñecas en círculos.",
+            "Repeticiones": "10 en cada dirección"
+          }
+        ]
+      },
+      {
+        "Nombre": "espalda",
+        "Ejercicios": [
+          {
+            "Nombre": "Estiramiento de espalda de gato y vaca",
+            "Descripción": "Arquea la espalda hacia arriba como un gato asustado y luego baja la columna vertebral como una vaca.",
+            "Repeticiones": "10 repeticiones"
+          },
+          {
+            "Nombre": "Rotación de tronco",
+            "Descripción": "Siéntate en una silla con los pies en el suelo y gira el tronco hacia un lado, manteniendo los pies en su lugar.",
+            "Repeticiones": "5 en cada lado"
+          },
+          {
+            "Nombre": "Estiramiento de hombros y pecho",
+            "Descripción": "Entrelaza los dedos detrás de la espalda y levanta los brazos mientras enderezas los codos.",
+            "Repeticiones": "10 repeticiones"
+          }
+        ]
+      },
+      {
+        "Nombre": "cadera",
+        "Ejercicios": [
+          {
+            "Nombre": "Estiramiento de cadera",
+            "Descripción": "De pie, lleva una pierna detrás de ti y flexiona la rodilla delantera. Mantén la posición.",
+            "Repeticiones": "15-20 segundos"
+          },
+          {
+            "Nombre": "Rotación de cadera",
+            "Descripción": "Siéntate en una silla y gira la cadera hacia un lado, manteniendo los pies en el suelo.",
+            "Repeticiones": "10 en cada lado"
+          },
+          {
+            "Nombre": "Elevación de cadera",
+            "Descripción": "Acuéstate boca arriba con las rodillas flexionadas y los pies en el suelo. Levanta las caderas.",
+            "Repeticiones": "10 repeticiones"
+          }
+        ]
+      },
+      {
+        "Nombre": "muñeca",
+        "Ejercicios": [
+          {
+            "Nombre": "Estiramiento de muñeca",
+            "Descripción": "Extiende un brazo frente a ti con la palma hacia arriba. Con la otra mano, tira suavemente de los dedos hacia atrás.",
+            "Repeticiones": "15-20 segundos"
+          },
+          {
+            "Nombre": "Rotación de muñeca",
+            "Descripción": "Extiende un brazo frente a ti con la palma hacia abajo y gira la muñeca en círculos.",
+            "Repeticiones": "10 en cada dirección"
+          },
+          {
+            "Nombre": "Flexión y extensión de muñeca",
+            "Descripción": "Con el brazo extendido, dobla la muñeca hacia arriba y luego hacia abajo.",
+            "Repeticiones": "10 repeticiones"
+          }
+        ]
+      },
+      {
+        "Nombre": "rodilla",
+        "Ejercicios": [
+          {
+            "Nombre": "Estiramiento de cuádriceps",
+            "Descripción": "De pie, lleva el talón hacia los glúteos y sujeta el pie con la mano. Mantén la posición.",
+            "Repeticiones": "15-20 segundos"
+          },
+          {
+            "Nombre": "Sentadillas",
+            "Descripción": "Párate con los pies separados al ancho de las caderas y baja el cuerpo hacia abajo doblando las rodillas.",
+            "Repeticiones": "10 repeticiones"
+          },
+          {
+            "Nombre": "Elevaciones de piernas",
+            "Descripción": "Acuéstate boca arriba con las rodillas dobladas y los pies en el suelo. Levanta una pierna.",
+            "Repeticiones": "10 en cada pierna"
+          }
+        ]
+      },
+      {
+        "Nombre": "tobillos",
+        "Ejercicios": [
+          {
+            "Nombre": "Estiramiento de pantorrillas",
+            "Descripción": "Colócate frente a una pared y extiende una pierna hacia atrás, manteniendo el talón en el suelo.",
+            "Repeticiones": "15-20 segundos"
+          },
+          {
+            "Nombre": "Rotación de tobillos",
+            "Descripción": "Siéntate en una silla con los pies en el suelo y gira los tobillos en círculos.",
+            "Repeticiones": "10 en cada dirección"
+          },
+          {
+            "Nombre": "Elevaciones de talones",
+            "Descripción": "Párate con los pies separados al ancho de las caderas y levanta los talones del suelo.",
+            "Repeticiones": "10 repeticiones"
+          }
+        ]
+      }
+    ]
+  }
+  

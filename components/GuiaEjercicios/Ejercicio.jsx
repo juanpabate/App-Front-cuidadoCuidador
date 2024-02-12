@@ -5,7 +5,10 @@ import ImageModal from 'react-native-image-modal';
 
 import React from 'react'
 
-const Ejercicio = ({navigation}) => {
+const Ejercicio = ({navigation, route}) => {
+
+  const { nombre, descripcion, repeticiones } = route.params;
+
 
   // const imageUri= 'https://media.post.rvohealth.io/wp-content/uploads/sites/3/2023/12/400x400_Exercises_for_Treating_and_Preventing_Runners_Knee_Straight_Leg_Lift.gif';
   const imageUri= 'https://www.icegif.com/wp-content/uploads/2022/07/icegif-470.gif'
@@ -21,7 +24,7 @@ const Ejercicio = ({navigation}) => {
       </View>
 
       <View style={styles.cardContainer}>
-        <Text style={[{fontSize: 22, color: '#45B3CB', fontWeight: 'bold'}]}>Nombre del ejercicio</Text>
+        <Text style={[{fontSize: 22, color: '#45B3CB', fontWeight: 'bold'}]}>{nombre}</Text>
         <View style={[{width: '100%', alignItems: 'center', marginVertical: 15, gap: 10}]}>
           
         <View style={{borderRadius: 15, overflow: 'hidden'}}>
@@ -37,14 +40,12 @@ const Ejercicio = ({navigation}) => {
           
           
           {/* <Image source={'https://media.post.rvohealth.io/wp-content/uploads/sites/3/2023/12/400x400_Exercises_for_Treating_and_Preventing_Runners_Knee_Straight_Leg_Lift.gif'} style={[{width: 150, height: 150,borderRadius: 15}]}/> */}
-          <Text style={[{fontSize: 13, color: '#898989'}]}>Descripción del ejercicio...  Lorem ipsum dolor sit amet consectetur adipiscing elit fames curae vulputate ultriciesLorem ipsum dolor sit amet consectetur adipiscing elit.</Text>
+          <Text style={[{fontSize: 13, color: '#898989'}]}>{descripcion}</Text>
         </View>
 
         <View style={[{width:'100%', paddingLeft: 5}]}>
-          <Text style={[{fontSize: 22, color: '#45B3CB', fontWeight: 'bold', marginBottom: 7}]}>Indicaciones:</Text>
-          <Text style={[{color: '#898989'}]}>1. Lorem ipsum dolor sit amet</Text>
-          <Text style={[{color: '#898989'}]}>2. Lorem ipsum dolor sit amet</Text>
-          <Text style={[{color: '#898989'}]}>3. Lorem ipsum dolor sit amet</Text>
+          <Text style={[{fontSize: 22, color: '#45B3CB', fontWeight: 'bold', marginBottom: 7}]}>Repeticiones:</Text>
+          <Text style={[{color: '#898989'}]}>{repeticiones}</Text>
         </View>
 
       </View>
