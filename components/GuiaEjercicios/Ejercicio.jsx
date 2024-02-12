@@ -57,7 +57,7 @@ const Ejercicio = ({navigation, route}) => {
 const styles= StyleSheet.create({
   banner: {
     width: '100%',
-    height: 150,
+    height: 130,
     contentFit: 'contain',
     marginBottom: 15
   },

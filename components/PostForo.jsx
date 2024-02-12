@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
   },
   banner: {
     width: '100%',
-    height: 150,
+    height: 120,
     contentFit: 'contain',
     marginBottom: 20
   },
