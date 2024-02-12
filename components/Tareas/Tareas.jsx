@@ -50,7 +50,7 @@ const Tareas = ({navigation}) => {
 
   const obtenerTareasUsuario = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:3000/tareas/${usuario.id}`);
+      const response = await fetch(`https://cuidado-cuidador-backend.onrender.com/tareas/${usuario.id}`);
       if (!response.ok) {
         throw new Error('Error al obtener las tareas del usuario');
       }
@@ -63,7 +63,7 @@ const Tareas = ({navigation}) => {
 
   const obtenerMedicinasUsuario = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:3000/medicinas/${usuario.id}`);
+      const response = await fetch(`https://cuidado-cuidador-backend.onrender.com/medicinas/${usuario.id}`);
       if (!response.ok) {
         throw new Error('Error al obtener las medicinas del usuario');
       }

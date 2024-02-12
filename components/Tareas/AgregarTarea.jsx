@@ -61,7 +61,7 @@ const AgregarTarea = ({navigation}) => {
           Descripcion: descripcion
         };
   
-        const response = await fetch('http://10.0.2.2:3000/agregarTarea', {
+        const response = await fetch('https://cuidado-cuidador-backend.onrender.com/agregarTarea', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

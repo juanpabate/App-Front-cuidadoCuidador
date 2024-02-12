@@ -16,7 +16,7 @@ const MedicinaCard = ({nombre, navigation, isEmpty, fechasSuministrada, hora, fe
 
   const agregarEliminarFechaSuministro = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:3000/medicina/agregarEliminarFechaSuministro', {
+      const response = await fetch('https://cuidado-cuidador-backend.onrender.com/medicina/agregarEliminarFechaSuministro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
