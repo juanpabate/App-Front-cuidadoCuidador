@@ -27,7 +27,7 @@ const COLORES= {
 const CARDS_DATA = [
   {
     id: 1,
-    title: 'Tareas paciente',
+    title: 'Tareas',
     color: '#7FAF69',
     icon: require('../assets/images/home/tareasPaciente.svg'),
     navigate: 'Tareas'
@@ -58,7 +58,7 @@ const Card = ({ title, icon, bgColor, navigate }) => {
       onPress={() => navigation.navigate(navigate)}
     >
       <Image style={styles.cardLogo} source={icon} />
-      <Text style={styles.cardTitle}>{title}</Text>
+      <Text style={[styles.cardTitle, title== 'Guía de ejercicios' ? {fontSize: 19, lineHeight: 20} : null]}>{title}</Text>
     </TouchableWithoutFeedback>
   );
 };
@@ -226,6 +226,26 @@ const Home = ({navigation}) => {
         <View style={styles.sectionContainer} >
 
           <View style={styles.sectionTextContainer}>
+            <Text style={proximaMedicina ? styles.sectionTitle : {fontSize: 20, fontWeight: 'bold'}}>{proximaMedicina ? 'Próxima medicina' : 'No hay medicinas pendientes hoy'}</Text>    
+          </View>
+          
+          <View style={styles.tasksContainer}>
+            <MedicinaCard 
+              isEmpty={proximaMedicina ? false : true}
+              navigation={navigation}
+              nombre={proximaMedicina ? proximaMedicina.nombreMedicina : ''}
+              fechasSuministrada={proximaMedicina ? proximaMedicina.fechaSuministrada: ''}
+              hora={proximaMedicina ? horaFormateada : ''}
+              fechaSeleccionada={new Date()}
+              idMedicina={proximaMedicina ? proximaMedicina.idMedicina : ''}
+            />
+          </View>
+      
+        </View>
+
+        <View style={styles.sectionContainer} >
+
+          <View style={styles.sectionTextContainer}>
             <Text style={styles.sectionTitle}>{tareas.length > 0 ? 'Próxima tarea' : 'Aún no hay tareas'}</Text>
             {
               tareas.length > 0 && 
@@ -251,30 +271,10 @@ const Home = ({navigation}) => {
       
         </View>
 
-        <View style={styles.sectionContainer} >
-
-          <View style={styles.sectionTextContainer}>
-            <Text style={proximaMedicina ? styles.sectionTitle : {fontSize: 20, fontWeight: 'bold'}}>{proximaMedicina ? 'Próxima medicina' : 'No hay medicinas pendientes hoy'}</Text>    
-          </View>
-          
-          <View style={styles.tasksContainer}>
-            <MedicinaCard 
-              isEmpty={proximaMedicina ? false : true}
-              navigation={navigation}
-              nombre={proximaMedicina ? proximaMedicina.nombreMedicina : ''}
-              fechasSuministrada={proximaMedicina ? proximaMedicina.fechaSuministrada: ''}
-              hora={proximaMedicina ? horaFormateada : ''}
-              fechaSeleccionada={new Date()}
-              idMedicina={proximaMedicina ? proximaMedicina.idMedicina : ''}
-            />
-          </View>
-      
-        </View>
-
         <View style={styles.tipContainer}> 
           <View style={styles.tipTextContainer}>
             <Text style={styles.tipTitle}>Recomendación</Text>
-            <Text style={styles.tipText}>Fermentum posuere urna nec tincidunt praesent semper feugiat. Odio tempor orci dapibus ultrices. Amet luctus venenatis.</Text>
+            <Text style={styles.tipText}>Establece una comunicación abierta y empática. Escucha activamente las preocupaciones y necesidades de la persona a tu cuidado.</Text>
           </View>
           <Image style={styles.tipImage} source={require('../assets/images/home/tip.png')} />
         </View>
@@ -307,7 +307,7 @@ const styles= StyleSheet.create({
     // paddingVertical: 10,
     // marginBottom: 100,
     paddingBottom: 40,
-    paddingTop: 20,
+    paddingTop: 10,
     paddingLeft: 20,
     paddingRight: 20
   },
@@ -319,7 +319,7 @@ const styles= StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 18
+    marginBottom: 10
     // paddingRight: 20,
   },
   logo: {
@@ -362,25 +362,29 @@ const styles= StyleSheet.create({
   card: {
     // borderColor: 'red',
     // borderWidth: 1,
-    width: 125,
-    height: 140,
-    paddingHorizontal: 14,
-    paddingVertical: 17,
+    width: 107,
+    height: 120,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     justifyContent: 'space-between',
     // backgroundColor: '#aaa',
-    borderRadius: 15
+    borderRadius: 15,
+    justifyContent: 'flex-end'
   },
   cardLogo: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
+    position: 'absolute',
+    top: 12,
+    right: 12
     // color: 'white'
   },
   cardTitle: {
     color: '#fff',
-    marginBottom: 8,
+    // marginBottom: 8,
     fontWeight: '600',
-    lineHeight: 20,
-    fontSize: 16
+    // lineHeight: 20,
+    fontSize: 23,
   },
   sectionContainer: {
     // borderColor: 'red',
@@ -439,34 +443,38 @@ const styles= StyleSheet.create({
     right: 35,
   },
   tipContainer: {
-    height: 140,
+    height: 115,
     width: '100%',
-    backgroundColor: COLORES.verdePrincipal,
+    backgroundColor: COLORES.blanco,
     marginTop: 20,
     borderRadius: 20,
-    padding: 15,
+    padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 35
+    marginBottom: 35,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: '#E6E6E6'
   },
   tipTextContainer: {
     flex: 1
   },
   tipTitle: {
-    color: COLORES.blanco,
+    color: '#FF8D46',
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 22,
     // marginBottom: 5
   },
   tipText: {
-    color: COLORES.blanco,
-    fontSize: 15
+    color: '#4D4D4D',
+    fontSize: 12
   },
   tipImage: {
     contentFit: 'contain',
-    width: 90,
-    height: 90,
-    flex: 0.5
+    width: 70,
+    height: 70,
+    // borderWidth: 2
+    // flex: 0.5
   }
 })
 
