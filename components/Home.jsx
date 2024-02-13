@@ -376,7 +376,7 @@ const styles= StyleSheet.create({
     height: 45,
     position: 'absolute',
     top: 12,
-    right: 12
+    left: 12
     // color: 'white'
   },
   cardTitle: {

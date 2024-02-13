@@ -147,9 +147,16 @@ export default function Register({navigation}){
       // Manejo respuesta del servidor
       const data = await response.json();
       console.log('Respuesta del servidor:', data);
+
+      showAlertWithTitleAndMessage('¡Listo!', 'Usuario registrado correctamente');
+
+      setTimeout(() => {
+        hideAlert();
+        navigation.replace('Login');
+
+      }, 2500);
   
       // Redirigir al login
-      navigation.replace('Login');
     } catch (error) {
       // Manejo de errores de solicitud
       console.error('Error al realizar la solicitud:', error);

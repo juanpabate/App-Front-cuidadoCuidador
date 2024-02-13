@@ -109,7 +109,7 @@ export default function Log({navigation}){
           setTimeout(() => {
             hideAlert();
             navigation.replace('Main');
-          }, 1500);
+          }, 2500);
 
           // Guardar en AsyncStorage
           const userData = { nombre, apellido, id };
