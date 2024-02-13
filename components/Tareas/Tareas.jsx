@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import MedicinaCard from './MedicinaCard';
 
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+
 
 
 const Tareas = ({navigation}) => {
@@ -19,12 +21,57 @@ const Tareas = ({navigation}) => {
 
   const [tareas, setTareas] = useState([]);
   const [medicinas, setMedicinas] = useState([]);
+
+  const [selected, setSelected] = useState('');
   
   const proximaTarea= tareas.length > 0 ? tareas[0] : null;
 
   const usuario = useSelector((state) => state?.usuario);
 
   const hora= new Date().toLocaleTimeString([], {hour12: true, hour: 'numeric', minute: 'numeric'});
+
+  LocaleConfig.locales['es'] = {
+    monthNames: [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
+    ],
+    monthNamesShort: [
+      'Ene.',
+      'Feb.',
+      'Mar.',
+      'Abr.',
+      'May.',
+      'Jun.',
+      'Jul.',
+      'Ago.',
+      'Sep.',
+      'Oct.',
+      'Nov.',
+      'Dic.',
+    ],
+    dayNames: [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ],
+    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+    today: 'Hoy',
+  };
+  LocaleConfig.defaultLocale = 'es';
 
   const getDiaSemana = (dia) => {
     switch (dia) {
@@ -120,7 +167,8 @@ const Tareas = ({navigation}) => {
       </View>
 
       {filter ==='Tareas' && 
-        <>
+        <ScrollView>
+        <View style={{alignItems: 'center'}}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{proximaTarea ? 'Próxima tarea' : 'No hay tareas pendientes'}</Text>
           {proximaTarea &&
@@ -141,13 +189,42 @@ const Tareas = ({navigation}) => {
           navigation={navigation}
         />
 
-        <TouchableOpacity onPress={()=> navigation.navigate('AgregarTarea')} style={{flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, backgroundColor: '#fff', padding: 10, borderRadius: 15}}>
+        <TouchableOpacity onPress={()=> navigation.navigate('AgregarTarea')} style={[{flexDirection: 'row', alignItems: 'center', gap: 15, marginTop: 20, marginBottom: 20}, proximaTarea ? null : {backgroundColor: '#fff', padding: 10, borderRadius: 15}]}>
           <View style={{backgroundColor: '#F4B860', borderRadius: 50, alignItems: 'center', justifyContent: 'center', width: 50, height: 50}}>
             <Image style={{width: 50, height: 50, contentFit: 'cover'}} source={require('../../assets/images/Tareas/Plus.svg')}/>
           </View>
           <Text style={{fontSize: 18}}>Agregar una nueva tarea</Text>
         </TouchableOpacity>
-        </>
+
+        <Calendar
+          onDayPress={day => {
+            setSelected(day.dateString);
+          }}
+          style={{
+            width: 340,
+            borderRadius: 15,
+            marginBottom: 15
+          }}
+          markedDates={{
+            [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
+          }}
+          theme={{
+            backgroundColor: '#ffff',
+            calendarBackground: '#ffffff',
+            textSectionTitleColor: '#F4B860',
+            selectedDayBackgroundColor: '#F4B860',
+            selectedDayTextColor: '#ffffff',
+            todayTextColor: '#00adf5',
+            dayTextColor: '#2d4150',
+            textDisabledColor: '#d9d9d9',
+            textDayFontWeight: '600',
+            arrowColor: '#F4B860',
+            textDayHeaderFontWeight: 'bold',
+            textDayHeaderFontSize: 13,
+          }}
+        />
+        </View>
+        </ScrollView>
       }
 
       {filter== 'Medicina' &&
@@ -289,6 +366,7 @@ const styles= StyleSheet.create({
     // borderWidth: 2,
     // borderColor: 'red',
     paddingTop: 35,
+    paddingBottom: 0,
   },
   banner: {
     width: '100%',
