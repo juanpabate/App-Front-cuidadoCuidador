@@ -7,7 +7,7 @@ import { Image } from 'expo-image';
 import { useSelector } from 'react-redux';
 // import { ScrollView } from 'react-native-gesture-handler';
 
-const Respuesta = ({ nombre, apellido, texto, fecha, handleReply, idUsuario, IdRespuesta, obtenerRespuestas }) => {
+const Respuesta = ({ nombre, apellido, texto, fecha, handleReply, idUsuario, IdRespuesta, borrarRespuesta }) => {
 
   const fechaOrdenada = new Date(fecha).toLocaleString('es-ES', {
     year: 'numeric',
@@ -28,23 +28,6 @@ const Respuesta = ({ nombre, apellido, texto, fecha, handleReply, idUsuario, IdR
     }
   }, []);
 
-  const handleBorrarRespuesta= async(IdRespuesta)=> {
-    try {
-      await fetch(`https://cuidado-cuidador-backend.onrender.com/foro/eliminarRespuesta/${IdRespuesta}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('Respuesta eliminada correctamente');
-      obtenerRespuestas;
-    } catch (error) {
-      console.error('Error al eliminar la respuesta:', error);
-    }
-  };
-
-
 
   return (
     <View style={styles.resContainer}>
@@ -64,7 +47,7 @@ const Respuesta = ({ nombre, apellido, texto, fecha, handleReply, idUsuario, IdR
       {
           isUser && 
           <View style={styles.actionButtonsMainContainer}>
-            <TouchableOpacity style={styles.actionButtonContainer} onPress={()=>handleBorrarRespuesta(IdRespuesta)}>
+            <TouchableOpacity style={styles.actionButtonContainer} onPress={borrarRespuesta}>
               <Image style={styles.actionButtonIcon} source={require('../assets/images/foro/delete.svg')} />
               <Text style={styles.actionButtonText}>Borrar</Text>
             </TouchableOpacity>
@@ -142,6 +125,22 @@ const PostForo = ({ route, navigation }) => {
       setRespuestas(data);
     } catch (error) {
       console.error('Error al obtener las publicaciones:', error);
+    }
+  };
+
+  const handleBorrarRespuesta= async(IdRespuesta)=> {
+    try {
+      await fetch(`https://cuidado-cuidador-backend.onrender.com/foro/eliminarRespuesta/${IdRespuesta}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('Respuesta eliminada correctamente');
+      obtenerRespuestas();
+    } catch (error) {
+      console.error('Error al eliminar la respuesta:', error);
     }
   };
 
@@ -362,7 +361,7 @@ const PostForo = ({ route, navigation }) => {
               idUsuario={item.IdUsuario}
               value={respuestaTexto}
               IdRespuesta={item.IdRespuesta}
-              obtenerRespuestas={obtenerRespuestas}
+              borrarRespuesta={()=> handleBorrarRespuesta(item.IdRespuesta)}
               key={item.IdRespuesta.toString()}
             />
           ))}
